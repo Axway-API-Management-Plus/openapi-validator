@@ -32,7 +32,7 @@ public class OpenAPIValidator
 		if(instances.containsKey(hashCode)) {
 			return instances.get(hashCode);
 		} else {
-			Utils.traceMessage("Creating new OpenAPI validator for given API-Specification:\n" + Utils.getContentStart(openAPISpec), TraceLevel.INFO);
+			Utils.traceMessage("Creating new OpenAPI validator instance for given API-Specification.", TraceLevel.INFO);
 			OpenAPIValidator validator = new OpenAPIValidator(openAPISpec);
 			instances.put(hashCode, validator);
 			return validator;
