@@ -1,0 +1,12 @@
+[
+  {
+    "id": "Should not be a string",
+    "category": {
+      "id": 0
+    },
+    "name": "swan",
+    "photoUrls": [],
+    "tags": [],
+    "status": "pending"
+  }
+]

@@ -25,39 +25,9 @@
   <!-- ================ -->
   <!-- Limit categories -->
   <!-- ================ -->
-
-  <!-- Our own classes-->
-  <logger name="com.consol.citrus">
-    <level value="INFO"/>
-  </logger>
-
-  <logger name="org.springframework">
-    <level value="INFO"/>
-  </logger>
-
-  <logger name="org.eclipse">
-    <level value="INFO"/>
-  </logger>
-
-  <!-- Limit the org.apache logger to INFO as its DEBUG is verbose -->
-  <logger name="org.apache">
-    <level value="INFO"/>
-  </logger>
-  <!-- "src/main/assembly/lib/log4j.xml"
-  <logger name="com.consol.citrus.channel.MessageSelectingQueueChannel">
-	<level value="WARN"/>
-  </logger>  -->
   
-  <logger name="com.consol.citrus">
+  <logger name="com.axway.openapi.validator">
 	<level value="INFO"/>
-  </logger>
-  
-  <logger name="com.axway.apim">
-	<level value="INFO"/>
-  </logger>
-  
-  <logger name="org.ehcache">
-	<level value="ERROR"/>
   </logger>
 
   <!-- ======================= -->

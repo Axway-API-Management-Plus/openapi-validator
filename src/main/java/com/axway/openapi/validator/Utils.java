@@ -1,13 +1,25 @@
 package com.axway.openapi.validator;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vordel.mime.HeaderSet;
+import com.vordel.mime.HeaderSet.Header;
+import com.vordel.mime.HeaderSet.HeaderEntry;
 import com.vordel.trace.Trace;
 
 public class Utils {
 	
-	static Logger LOG = LoggerFactory.getLogger("OpenAPIValidator");
+	private static Logger LOG = LoggerFactory.getLogger("OpenAPIValidator");
+	private static String LOG_PREFIX = "OpenAPIValidator: ";
 	
 	enum TraceLevel {
 		FATAL, ALWAYS, ERROR, INFO, MIN, DEBUG, DATA ;
@@ -21,27 +33,28 @@ public class Utils {
 	
 	public static void traceMessage(String message, Throwable t, TraceLevel level) {
 		setupTraceMode();
+		if(level==null) level = TraceLevel.ERROR;
 		switch (level) {
 		case FATAL: 
-			if(useAPIGatewayTrace) { Trace.fatal(message, t); } else { LOG.error(message, t); }
+			if(useAPIGatewayTrace) { Trace.fatal(LOG_PREFIX + message, t); } else { LOG.error(message, t); }
 			break;
 		case ALWAYS: 
-			if(useAPIGatewayTrace) { Trace.always(message, t); } else { LOG.info(message, t); }
+			if(useAPIGatewayTrace) { Trace.always(LOG_PREFIX + message, t); } else { LOG.info(message, t); }
 			break;
 		case ERROR:
-			if(useAPIGatewayTrace) { Trace.error(message, t); } else { LOG.error(message, t); }
+			if(useAPIGatewayTrace) { Trace.error(LOG_PREFIX + message, t); } else { LOG.error(message, t); }
 			break;
 		case INFO:
-			if(useAPIGatewayTrace) { Trace.info(message, t); } else { LOG.info(message, t); }
+			if(useAPIGatewayTrace) { Trace.info(LOG_PREFIX + message, t); } else { LOG.info(message, t); }
 			break;
 		case MIN: 
-			if(useAPIGatewayTrace) { Trace.min(message, t); } else { LOG.warn(message, t); }
+			if(useAPIGatewayTrace) { Trace.min(LOG_PREFIX + message, t); } else { LOG.warn(message, t); }
 			break;
 		case DEBUG:
-			if(useAPIGatewayTrace) { Trace.debug(message, t); } else { LOG.debug(message, t); }
+			if(useAPIGatewayTrace) { Trace.debug(LOG_PREFIX + message, t); } else { LOG.debug(message, t); }
 			break;
 		case DATA:
-			if(useAPIGatewayTrace) { Trace.trace(message, Trace.TRACE_DATA); } else { LOG.trace(message, t); }
+			if(useAPIGatewayTrace) { Trace.trace(LOG_PREFIX + message, Trace.TRACE_DATA); } else { LOG.trace(message, t); }
 			break;
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + level);
@@ -56,12 +69,35 @@ public class Utils {
 		} catch (Exception ignore) {}; 
 	}
 	
-	public static String getContentStart(String someContent) {
+	public static String getContentStart(String someContent, int maxLength, boolean removeNewLines) {
 		try {
 			if(someContent == null) return "N/A";
-			return (someContent.length()<200) ? someContent.substring(0, someContent.length()) : someContent.substring(0, 200) + "...";
+			if(removeNewLines) someContent = someContent.replaceAll("\\r?\\n", "");
+			return (someContent.length()<200) ? someContent.substring(0, someContent.length()) : someContent.substring(0, maxLength) + "...(truncated)";
 		} catch (Exception e) {
 			return "Cannot get content from API-Specification. " + e.getMessage();
 		}		
 	}
+	
+    public static Map<String, Collection<String>> headersToMap(HeaderSet set) {
+    	return null;
+    	// Actually not used for the validation at all
+        /*Map<String, Collection<String>> map = new TreeMap<String, Collection<String>>(String.CASE_INSENSITIVE_ORDER);
+        for (Entry<String, HeaderEntry> entry : set.entrySet()) {
+        }
+        return map;*/
+    }
+    
+    public static Collection<String> getHeaderValues(HeaderSet headers, String name) {
+    	Collection<String> result = new ArrayList<String>();
+    	if(headers==null) return result;
+		HeaderEntry headerValues = headers.getHeaderEntry(name);
+		if(headerValues==null) return result; // Header might not be set
+		Iterator<Header> it = headerValues.iterator();
+		while(it.hasNext()) {
+			Header header = it.next();
+			result.add(header.toString());
+		}
+		return result;
+    }
 }

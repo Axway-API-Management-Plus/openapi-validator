@@ -22,16 +22,16 @@
    </repositories>
    
    <dependencies>
+   	  <!-- Any higher version causing the API-Gateway to fail as it conflicts with the delivery Guava-Library used for the Cassandra communication -->
       <dependency>
          <groupId>com.atlassian.oai</groupId>
          <artifactId>swagger-request-validator-core</artifactId>
-         <version>2.18.0</version>
+         <version>2.11.0</version> 
       </dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>7.4.0</version>
-			<scope>test</scope>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.30</version>
 		</dependency>
       <dependency>
          <groupId>com.axway.apigw</groupId>
@@ -48,6 +48,31 @@
          <artifactId>vordel-trace</artifactId>
          <version>${apigateway.version}</version>
       </dependency>
+      <dependency>
+         <groupId>com.vordel</groupId>
+         <artifactId>vordel-core-runtime</artifactId>
+         <version>${apigateway.version}</version>
+      </dependency>
+      
+      <dependency>
+		<groupId>org.testng</groupId>
+		<artifactId>testng</artifactId>
+		<version>7.4.0</version>
+		<scope>test</scope>
+	  </dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.11.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.11.3</version>
+			<scope>test</scope>
+		</dependency>
+       
    </dependencies>
    <build>
 		<plugins>

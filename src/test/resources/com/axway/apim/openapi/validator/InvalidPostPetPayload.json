@@ -1,0 +1,18 @@
+{
+  "id": 12,
+  "caXegory": {
+    "id": 233,
+    "name": "Goofie"
+  },
+  "name": "doggie",
+  "photoUrls": [
+    "https://a-valid.url"
+  ],
+  "tags": [
+    {
+      "id": 2,
+      "name": "Test-Tag"
+    }
+  ],
+  "status": "available"
+}
