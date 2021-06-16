@@ -69,7 +69,7 @@ public class Utils {
 		try {
 			if(someContent == null) return "N/A";
 			if(removeNewLines) someContent = someContent.replaceAll("\\r?\\n", "");
-			return (someContent.length()<200) ? someContent.substring(0, someContent.length()) : someContent.substring(0, maxLength) + "...(truncated)";
+			return (someContent.length()<maxLength) ? someContent.substring(0, someContent.length()) : someContent.substring(0, maxLength) + "...(truncated)";
 		} catch (Exception e) {
 			return "Cannot get content from API-Specification. " + e.getMessage();
 		}		

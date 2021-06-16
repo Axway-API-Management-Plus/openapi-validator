@@ -27,6 +27,8 @@ public class OpenAPIValidator
 	
 	private OpenApiInteractionValidator validator;
 	
+	private int payloadLogMaxLength = 40;
+	
 	public static synchronized OpenAPIValidator getInstance(String openAPISpec)  {
 		int hashCode = openAPISpec.hashCode();
 		if(instances.containsKey(hashCode)) {
@@ -55,7 +57,7 @@ public class OpenAPIValidator
 	}
     
     public boolean isValidRequest(String payload, String verb, String path, QueryStringHeaderSet queryParams, HeaderSet headers) {
-    	Utils.traceMessage("Validate request: [verb: "+verb+", path: '"+path+"', payload: '"+Utils.getContentStart(payload, 20, true)+"']", TraceLevel.INFO);
+    	Utils.traceMessage("Validate request: [verb: "+verb+", path: '"+path+"', payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
     	ValidationReport validationReport = validateRequest(payload, verb, path, queryParams, headers);
     	if (validationReport.hasErrors()) {
     		return false;
@@ -65,7 +67,7 @@ public class OpenAPIValidator
     }
     
     public boolean isValidResponse(String payload, String verb, String path, int status, HeaderSet headers) {
-    	Utils.traceMessage("Validate response: [verb: "+verb+", path: '"+path+"', status: +status+, payload: '"+Utils.getContentStart(payload, 20, true)+"']", TraceLevel.INFO);
+    	Utils.traceMessage("Validate response: [verb: "+verb+", path: '"+path+"', status: +status+, payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
     	ValidationReport validationReport = validateResponse(payload, verb, path, status, headers);
     	if (validationReport.hasErrors()) {
     		return false;
@@ -151,4 +153,12 @@ public class OpenAPIValidator
     	}
     	return validationReport;
     }
+
+	public int getPayloadLogMaxLength() {
+		return payloadLogMaxLength;
+	}
+
+	public void setPayloadLogMaxLength(int payloadLogMaxLength) {
+		this.payloadLogMaxLength = payloadLogMaxLength;
+	}
 }
