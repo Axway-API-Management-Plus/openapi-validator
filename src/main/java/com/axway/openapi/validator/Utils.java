@@ -3,10 +3,6 @@ package com.axway.openapi.validator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,21 +74,20 @@ public class Utils {
 			return "Cannot get content from API-Specification. " + e.getMessage();
 		}		
 	}
-	
-    public static Map<String, Collection<String>> headersToMap(HeaderSet set) {
-    	return null;
-    	// Actually not used for the validation at all
-        /*Map<String, Collection<String>> map = new TreeMap<String, Collection<String>>(String.CASE_INSENSITIVE_ORDER);
-        for (Entry<String, HeaderEntry> entry : set.entrySet()) {
-        }
-        return map;*/
-    }
     
     public static Collection<String> getHeaderValues(HeaderSet headers, String name) {
     	Collection<String> result = new ArrayList<String>();
     	if(headers==null) return result;
 		HeaderEntry headerValues = headers.getHeaderEntry(name);
-		if(headerValues==null) return result; // Header might not be set
+		if(headerValues==null) {
+			if(name.toLowerCase().equals("content-type")) {
+				traceMessage("Header: Content-Type not found. Defaulting to application/json", TraceLevel.DEBUG);
+				result.add("application/json");
+				return result;
+			} else {
+				return result; // Header might not be set
+			}
+		}
 		Iterator<Header> it = headerValues.iterator();
 		while(it.hasNext()) {
 			Header header = it.next();

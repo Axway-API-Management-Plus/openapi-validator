@@ -102,6 +102,20 @@ public class OpenAPIValidatorTest
     }
     
     @Test
+    public void invalidPostRequestNoContentTypeHeader() throws IOException
+    {
+    	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
+    	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
+    	
+    	String payload = "Some invalid payload";
+    	String path = "/pet";
+    	String verb = "POST";
+    	HeaderSet headers = new HeaderSet();
+    	
+    	Assert.assertFalse(validator.isValidRequest(payload, verb, path, null, headers));
+    }
+    
+    @Test
     public void validResponse() throws IOException
     {
     	OpenAPIValidator validator = OpenAPIValidator.getInstance("https://petstore.swagger.io/v2/swagger.json");
