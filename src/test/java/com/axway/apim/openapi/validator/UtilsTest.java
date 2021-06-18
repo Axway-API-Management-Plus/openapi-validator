@@ -6,8 +6,6 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.reporters.Files;
 
-import com.axway.openapi.validator.Utils;
-
 public class UtilsTest {
 	
 	private static final String TEST_PACKAGE = "com/axway/apim/openapi/validator/";

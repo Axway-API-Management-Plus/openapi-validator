@@ -1,4 +1,4 @@
-package com.axway.openapi.validator;
+package com.axway.apim.openapi.validator;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import com.atlassian.oai.validator.model.Request;
 import com.atlassian.oai.validator.model.Response;
 import com.atlassian.oai.validator.report.ValidationReport;
 import com.atlassian.oai.validator.report.ValidationReport.Message;
-import com.axway.openapi.validator.Utils.TraceLevel;
+import com.axway.apim.openapi.validator.Utils.TraceLevel;
 import com.vordel.mime.HeaderSet;
 import com.vordel.mime.QueryStringHeaderSet;
 
@@ -24,6 +24,8 @@ import com.vordel.mime.QueryStringHeaderSet;
 public class OpenAPIValidator
 {
 	private static Map<Integer, OpenAPIValidator> instances = new HashMap<Integer, OpenAPIValidator>();
+	
+	private static Map<String, OpenAPIValidator> instances4APIIDs = new HashMap<String, OpenAPIValidator>();
 	
 	private OpenApiInteractionValidator validator;
 	
@@ -41,6 +43,22 @@ public class OpenAPIValidator
 			return validator;
 		}
 	}
+	
+	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password) throws Exception  {
+		String apiManagerURL = "https://localhost:8075";
+		return getInstance(apiId, username, password, apiManagerURL);
+	}
+	
+	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, String apiManagerUrl) throws Exception  {
+		if(instances4APIIDs.containsKey(apiId)) {
+			return instances4APIIDs.get(apiId);
+		} else {
+			Utils.traceMessage("Creating new OpenAPI validator instance for given API-ID.", TraceLevel.INFO);
+			OpenAPIValidator validator = new OpenAPIValidator(apiId, username, password, apiManagerUrl);
+			instances4APIIDs.put(apiId, validator);
+			return validator;
+		}
+	}
     
     private OpenAPIValidator(String openAPISpec) {
 		super();
@@ -53,6 +71,19 @@ public class OpenAPIValidator
 		} catch (Exception e) {
 			Utils.traceMessage("Creating OpenAPIValidator from inline specification", TraceLevel.INFO);
 			this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(openAPISpec).build();
+		}
+	}
+    
+    private OpenAPIValidator(String apiId, String username, String password, String apiManagerUrl) throws Exception {
+		super();
+		try {
+			Utils.traceMessage("Creating OpenAPIValidator from for: [apiId: '"+apiId+"', username: '"+username+"', password: '*******', apiManagerUrl: '"+apiManagerUrl+"']", TraceLevel.INFO);
+			APIManagerSchemaProvider schemaProvider = new APIManagerSchemaProvider(apiManagerUrl, username, password);
+			String apiSpecification = schemaProvider.getSchema(apiId);
+			this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(apiSpecification).build();
+		} catch (Exception e) {
+			Utils.traceMessage("Error creating OpenAPIValidator for given API-ID: "+apiId, e, TraceLevel.ERROR);
+			throw e;
 		}
 	}
     

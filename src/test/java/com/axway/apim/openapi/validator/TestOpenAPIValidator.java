@@ -8,14 +8,13 @@ import org.testng.reporters.Files;
 
 import com.atlassian.oai.validator.report.ValidationReport;
 import com.atlassian.oai.validator.report.ValidationReport.Level;
-import com.axway.openapi.validator.OpenAPIValidator;
 import com.vordel.mime.HeaderSet;
 import com.vordel.mime.QueryStringHeaderSet;
 
 /**
  * Unit test for the OpenAPI Validator
  */
-public class OpenAPIValidatorTest 
+public class TestOpenAPIValidator 
 {
 	
 	private static final String TEST_PACKAGE = "com/axway/apim/openapi/validator/";

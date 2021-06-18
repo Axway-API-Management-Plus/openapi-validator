@@ -22,6 +22,11 @@
    </repositories>
    
    <dependencies>
+   		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.9</version>
+		</dependency>
    	  <!-- Any higher version causing the API-Gateway to fail as it conflicts with the delivery Guava-Library used for the Cassandra communication -->
       <dependency>
          <groupId>com.atlassian.oai</groupId>
@@ -72,6 +77,19 @@
 			<version>2.11.3</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.mock-server</groupId>
+		    <artifactId>mockserver-netty</artifactId>
+		    <version>5.11.2</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.mock-server</groupId>
+		    <artifactId>mockserver-client-java</artifactId>
+		    <version>5.11.2</version>
+		    <scope>test</scope>
+		</dependency>
+
        
    </dependencies>
    <build>
@@ -99,7 +117,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-   
+	
       <pluginManagement>
          <plugins>
             <plugin>

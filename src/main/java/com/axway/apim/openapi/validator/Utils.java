@@ -1,4 +1,4 @@
-package com.axway.openapi.validator;
+package com.axway.apim.openapi.validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
