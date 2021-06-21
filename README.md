@@ -23,8 +23,7 @@ import com.vordel.trace.Trace
 
 def invoke(msg)
 {
-    String swagger = msg.get('var.swagger')
-    def validator = OpenAPIValidator.getInstance(swagger);
+    def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
     def payload = bodyAsString(msg.get("content.body"));
     def path = msg.get("api.method.path");
     def verb = msg.get("http.request.verb");
@@ -61,8 +60,10 @@ import com.vordel.trace.Trace
 
 def invoke(msg)
 {
-    String swagger = msg.get('var.swagger')
-    def validator = OpenAPIValidator.getInstance(swagger);
+    // Read OpenAPI-Spec from an attribute
+    // String swagger = msg.get('var.swagger')
+    // def validator = OpenAPIValidator.getInstance(swagger);
+    def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
     def payload = bodyAsString(msg.get('content.body'));
     def path = msg.get("api.method.path");
     def verb = msg.get("http.request.verb");
