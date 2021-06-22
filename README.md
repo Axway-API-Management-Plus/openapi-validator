@@ -131,3 +131,13 @@ With this option you specify the URL that the API specification returns. For exa
 ```
 def validator = OpenAPIValidator.getInstance("https://petstore.swagger.io/v2/swagger.json");
 ```
+
+## Team
+
+![alt text][Axwaylogo] Axway Team
+
+[Axwaylogo]: https://github.com/Axway-API-Management/Common/blob/master/img/AxwayLogoSmall.png  "Axway logo"
+
+
+## License
+[Apache License 2.0](/LICENSE)
