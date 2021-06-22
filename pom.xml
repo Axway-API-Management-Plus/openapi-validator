@@ -5,8 +5,32 @@
    <artifactId>openapi-validator</artifactId>
    <version>1.0-SNAPSHOT</version>
    <name>openapi-validator</name>
-   <!-- FIXME change it to the project's website -->
-   <url>http://www.example.com</url>
+
+   <url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
+   
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Chris Wiechmann</name>
+			<email>cwiechmann@axway.com</email>
+			<organization>Axway</organization>
+			<organizationUrl>http://www.axway.com</organizationUrl>
+		</developer>
+	</developers>
+	
+	<scm>
+		<connection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</connection>
+		<developerConnection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</developerConnection>
+		<url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
+		<tag>v1.0.0</tag>
+	</scm>
+   
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.compiler.source>1.7</maven.compiler.source>
