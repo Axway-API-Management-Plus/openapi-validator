@@ -53,7 +53,7 @@ public class OpenAPIValidator
 		if(instances4APIIDs.containsKey(apiId)) {
 			return instances4APIIDs.get(apiId);
 		} else {
-			Utils.traceMessage("Creating new OpenAPI validator instance for given API-ID.", TraceLevel.INFO);
+			Utils.traceMessage("Creating new OpenAPI validator instance for given API-ID: '"+apiId+"'", TraceLevel.INFO);
 			OpenAPIValidator validator = new OpenAPIValidator(apiId, username, password, apiManagerUrl);
 			instances4APIIDs.put(apiId, validator);
 			return validator;
@@ -77,7 +77,7 @@ public class OpenAPIValidator
     private OpenAPIValidator(String apiId, String username, String password, String apiManagerUrl) throws Exception {
 		super();
 		try {
-			Utils.traceMessage("Creating OpenAPIValidator from for: [apiId: '"+apiId+"', username: '"+username+"', password: '*******', apiManagerUrl: '"+apiManagerUrl+"']", TraceLevel.INFO);
+			Utils.traceMessage("Creating OpenAPIValidator for: [apiId: '"+apiId+"', username: '"+username+"', password: '*******', apiManagerUrl: '"+apiManagerUrl+"']", TraceLevel.INFO);
 			APIManagerSchemaProvider schemaProvider = new APIManagerSchemaProvider(apiManagerUrl, username, password);
 			String apiSpecification = schemaProvider.getSchema(apiId);
 			this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(apiSpecification).build();
@@ -98,7 +98,7 @@ public class OpenAPIValidator
     }
     
     public boolean isValidResponse(String payload, String verb, String path, int status, HeaderSet headers) {
-    	Utils.traceMessage("Validate response: [verb: "+verb+", path: '"+path+"', status: +status+, payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
+    	Utils.traceMessage("Validate response: [verb: "+verb+", path: '"+path+"', status: "+status+", payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
     	ValidationReport validationReport = validateResponse(payload, verb, path, status, headers);
     	if (validationReport.hasErrors()) {
     		return false;

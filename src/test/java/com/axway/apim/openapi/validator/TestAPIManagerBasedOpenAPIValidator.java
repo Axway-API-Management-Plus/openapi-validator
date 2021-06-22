@@ -55,6 +55,31 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	
 	@SuppressWarnings("resource")
 	@Test
+	public void getAPISpecForValidOAS30ApiId() throws Exception {
+		String failedToDownloadAPI = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "FailedToDownloadAPI.json"));
+		// Initially trying to download Swagger 2.0
+		new MockServerClient("127.0.01", 1080)
+		.when(request()
+				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
+				.withQueryStringParameter("swaggerVersion", "2.0")
+				)
+		.respond(response().withStatusCode(500).withBody(new JsonBody(failedToDownloadAPI))
+		);
+		new MockServerClient("127.0.01", 1080)
+		.when(request()
+				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
+				.withQueryStringParameter("swaggerVersion", "3.0")
+				)
+		.respond(response().withStatusCode(200).withBody("{ This is supposed to be a swagger-file }")
+		);
+
+		APIManagerSchemaProvider provider = new APIManagerSchemaProvider("https://localhost:1080", "user", "password");
+		String apiSpec = provider.getSchema("d45571e4-ec7d-444c-af09-11265d75c446");
+		Assert.assertEquals(apiSpec, "{ This is supposed to be a swagger-file }");
+	}
+	
+	@SuppressWarnings("resource")
+	@Test
 	public void testOpenAPIBasedOnAPIManagerApiID() throws Exception {
 		String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
 		
