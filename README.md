@@ -15,24 +15,30 @@ To call the OpenAPI validator, use a scripting filter. You can use Groovy or any
 
 ### Validate request
 
-Here is an example for Groovy:
+Use a request policy and, for example, a custom property to enable or disable the check. The validator can be included using a scripting filter as in the following example.  
+
+Here is an example for Groovy:  
 
 ```groovy
-import com.axway.openapi.validator.OpenAPIValidator;
+import com.axway.apim.openapi.validator.OpenAPIValidator;
 import com.vordel.trace.Trace
 
 def invoke(msg)
 {
+    // Get the ID of the API currently processed
     def apiId = msg.get("api.id");
+    // Get/Create an OpenAPIValidator instance based on the API-ID
     def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
-    def payload = bodyAsString(msg.get("content.body"));
+    // Get required parameters for the validation
+    def payload = bodyAsString(msg.get('content.body'));
     def path = msg.get("api.method.path");
     def verb = msg.get("http.request.verb");
     def queryParams = msg.get("params.query");
     def headers = msg.get("http.headers");
-    Trace.debug('Calling OpenAPIValidator: [path: ' + path + ', verb: ' + verb + ']');
     try {
+        // Call the validator itself
         def rc = validator.isValidRequest(payload, verb, path, queryParams, headers);
+        Trace.info('rc: ' + rc);
         return rc;
     } catch (Exception e) {
         Trace.error('Error validating request', e);
@@ -55,15 +61,14 @@ def bodyAsString(body) {
 
 ### Validate response
 
+Analogously, you can also check the response. Since the response scheme depends on the status code, this must also be passed.
+
 ```groovy
-import com.axway.openapi.validator.OpenAPIValidator;
+import com.axway.apim.openapi.validator.OpenAPIValidator;
 import com.vordel.trace.Trace
 
 def invoke(msg)
 {
-    // Read OpenAPI-Spec from an attribute
-    // String swagger = msg.get('var.swagger')
-    // def validator = OpenAPIValidator.getInstance(swagger);
     def apiId = msg.get("api.id");
     def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
     def payload = bodyAsString(msg.get('content.body'));
@@ -73,7 +78,7 @@ def invoke(msg)
     def headers = msg.get("http.headers");
     Trace.debug('Calling OpenAPIValidator: [path: ' + path + ', verb: ' + verb + ', status: ' + status + ']');
     try {
-        def rc = validator.isValidRequest(payload, verb, path, status, headers);
+        def rc = validator.isValidResponse(payload, verb, path, status, headers);
         return rc;
     } catch (Exception e) {
         Trace.error('Error validating response', e);
@@ -92,4 +97,37 @@ def bodyAsString(body) {
          return null
      }
 }
+```
+
+## Get an OpenAPI-Validator instance
+
+The OpenAPI validator can be created in several ways. It is implemented as a singleton. This means that only one instance exists per API specification/API ID. Basically, the validator is instantiated based on a Swagger 2.0 or OpenAPI 3.0.x specification. You can provide it in JSON or YAML format.
+
+### Based on the API-Manager API-ID
+
+With this option, you pass the ID of the API in the API Manager. The OpenAPI validator uses the credentials to load the associated API specification (Swagger 2.0, OpenAPI 3.0) and initialize itself with it. This process is done only on the first call for each API-ID. 
+The user must be User, which has access to this API. The user must be a member of an organization that can see this API.
+You can also specify the URL of the API manager, otherwise `https://localhost:8075` is taken as default.
+
+```
+OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
+// or
+OpenAPIValidator.getInstance(apiId, "user", "password", "https://manager.customer.com");
+```
+
+### Using an Inline Swagger
+
+With this procedure, you pass the API specification as a string to the OpenAPI validator. You can read this from the KPS via policies, for example. In this case, a hash value is determined for the API specification and an OpenAPI Validator instance is created for each hash value.
+
+```
+def swagger = msg.get("swaggerAsString");
+def validator = OpenAPIValidator.getInstance(swagger);
+```
+
+### Using a URL
+
+With this option you specify the URL that the API specification returns. For example: https://petstore.swagger.io/v2/swagger.json. Authentication is not currently supported. Please create an issue if this is necessary.
+
+```
+def validator = OpenAPIValidator.getInstance("https://petstore.swagger.io/v2/swagger.json");
 ```
