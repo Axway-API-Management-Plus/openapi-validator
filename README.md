@@ -140,7 +140,7 @@ This artefact has been tested with API-Management Versions
 | Version            | Comment         |
 | :---               | :---            | 
 | 7.7-20210330       |                 |
-| 7.7.20200930       |                 |
+| 7.7-20200930       |                 |
 
 Please let us know, if you encounter any [issues](https://github.com/Axway-API-Management-Plus/openapi-validator/issues) with your API-Manager version.  
 
