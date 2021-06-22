@@ -17,6 +17,8 @@ To call the OpenAPI validator, use a scripting filter. You can use Groovy or any
 
 Use a request policy and, for example, a custom property to enable or disable the check. The validator can be included using a scripting filter as in the following example.  
 
+![Sample request policy](images/sample-policy.png)  
+
 Here is an example for Groovy:  
 
 ```groovy
