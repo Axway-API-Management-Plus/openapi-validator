@@ -7,7 +7,7 @@ The following illustrates how it works and behaves in the API-Gateway at runtime
 
 ## Installation
 
-To install, download the release package and install it under `ext/lib`. After that, restart the API Gateway. It is recommended to make the jar files known in the Policy Studio as well.
+To install, download the [release package](https://github.com/Axway-API-Management-Plus/openapi-validator/releases) and install it under `ext/lib`. After that, restart the API Gateway. It is recommended to make the jars files known in the Policy Studio as well as it is describe here: https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/apigw_poldev/general_ps_settings/index.html#runtime-dependencies
 
 ## Setup
 
@@ -131,6 +131,22 @@ With this option you specify the URL that the API specification returns. For exa
 ```
 def validator = OpenAPIValidator.getInstance("https://petstore.swagger.io/v2/swagger.json");
 ```
+
+
+## API Management Version Compatibilty
+
+This artefact has been tested with API-Management Versions
+
+| Version            | Comment         |
+| :---               | :---            | 
+| 7.7-20210330       |                 |
+| 7.7.20200930       |                 |
+
+Please let us know, if you encounter any [issues](https://github.com/Axway-API-Management-Plus/openapi-validator/issues) with your API-Manager version.  
+
+## Contributing
+
+Please read [Contributing.md](https://github.com/Axway-API-Management-Plus/Common/blob/master/Contributing.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Team
 
