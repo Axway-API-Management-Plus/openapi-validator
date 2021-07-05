@@ -140,7 +140,8 @@ def validator = OpenAPIValidator.getInstance("https://petstore.swagger.io/v2/swa
 This artefact has been tested with API-Management Versions
 
 | Version            | Comment         |
-| :---               | :---            | 
+| :---               | :---            |
+| 7.7-20210530       |                 |
 | 7.7-20210330       |                 |
 | 7.7-20200930       |                 |
 
