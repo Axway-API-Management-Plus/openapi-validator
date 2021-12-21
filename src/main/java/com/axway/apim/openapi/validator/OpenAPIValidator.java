@@ -31,7 +31,7 @@ public class OpenAPIValidator
 	
 	private OpenApiInteractionValidator validator;
 	
-	private MaxSizeHashMap<String, String> exposurePath2SpecifiedPathMap = new MaxSizeHashMap<String, String>();
+	private MaxSizeHashMap<String, Object> exposurePath2SpecifiedPathMap = new MaxSizeHashMap<String, Object>();
 	
 	private int payloadLogMaxLength = 40;
 	
@@ -96,7 +96,7 @@ public class OpenAPIValidator
     	Utils.traceMessage("Validate request: [verb: "+verb+", path: '"+path+"', payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
     	ValidationReport validationReport = null;
     	String originalPath = path;
-    	// The given path might be the FE-API exposed path which is not always part of the API-Specification. 
+    	// The given path might be the FE-API exposure path which is not guaranteed to be part of the API-Specification.
     	// If for example the Petstore is exposed with /petstore/v3 the path we get might be /petstore/v3/store/order/78787 
     	// and with that, the validation fails, as the specification doesn't contain this path.
     	// The following code nevertheless tries to find the matching API path by removing the first part of the path and 
@@ -105,11 +105,19 @@ public class OpenAPIValidator
     	boolean cachePath = false;
     	// Perhaps the path has already looked up and matched to the specified path (e.g. /petstore/v3/store/order/78787 --> /store/order/{orderId} 
     	if(exposurePath2SpecifiedPathMap.containsKey(path)) {
-    		// In that case perform the validation based on the cached path
-    		validationReport = validateRequest(payload, verb, exposurePath2SpecifiedPathMap.get(path), queryParams, headers);
+    		if(exposurePath2SpecifiedPathMap.get(path) instanceof ValidationReport) {
+    			// Previously with the given we got a validation error, just return the same again
+    			validationReport = (ValidationReport)exposurePath2SpecifiedPathMap.get(path);
+    		} else {
+	    		// In that case perform the validation based on the cached path
+	    		validationReport = validateRequest(payload, verb, (String)exposurePath2SpecifiedPathMap.get(path), queryParams, headers);
+    		}
     	} else {
     		// Otherwise try to find the belonging specified path
 	    	for(int i=0; i<5;i++) {
+	    		if(cachePath) {
+	    			Utils.traceMessage("Retrying validation with reduced path: '"+path+"']' ("+i+"/5)", TraceLevel.INFO);
+	    		}
 	    		validationReport = validateRequest(payload, verb, path, queryParams, headers);
 	    		if(validationReport.hasErrors()) {
 	    			if(validationReport.getMessages().toString().contains("No API path found that matches request")) {
@@ -125,7 +133,12 @@ public class OpenAPIValidator
 	    		}
 	    	}
 			if(cachePath) {
-				exposurePath2SpecifiedPathMap.put(originalPath, path);
+				if(validationReport.hasErrors() && validationReport.getMessages().toString().contains("No API path found that matches request")) {
+					// Finally no match found, cache the returned validation report
+					exposurePath2SpecifiedPathMap.put(originalPath, validationReport);
+				} else {
+					exposurePath2SpecifiedPathMap.put(originalPath, path);
+				}
 			}
     	}
     	
@@ -248,7 +261,7 @@ public class OpenAPIValidator
 		}
 	}
 
-	public MaxSizeHashMap<String, String> getExposurePath2SpecifiedPathMap() {
+	public MaxSizeHashMap<String, Object> getExposurePath2SpecifiedPathMap() {
 		return exposurePath2SpecifiedPathMap;
 	}
 }

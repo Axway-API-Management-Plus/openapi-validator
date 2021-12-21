@@ -127,6 +127,22 @@ public class TestOpenAPIValidator
     }
     
     @Test
+    public void invalidRequestNoMatchToSpec() throws IOException
+    {
+    	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
+    	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
+    	
+    	String path = "/api/petstore/will/never/map/should/be/cached/anyway";
+    	String verb = "GET";
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("Content-Type", "application/json");
+    	
+    	Assert.assertFalse(validator.isValidRequest(null, verb, path, null, headers));
+    	// This time, it should be cached anyway
+    	Assert.assertFalse(validator.isValidRequest(null, verb, path, null, headers));
+    }
+    
+    @Test
     public void validRequestExternalURLSwagger20() throws IOException
     {
     	OpenAPIValidator validator = OpenAPIValidator.getInstance("https://petstore.swagger.io/v2/swagger.json");

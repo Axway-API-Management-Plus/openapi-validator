@@ -31,6 +31,11 @@ def invoke(msg)
     def apiId = msg.get("api.id");
     // Get/Create an OpenAPIValidator instance based on the API-ID
     def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
+    
+    // Optionally you can configure an internal cache. For more details please see:
+    // https://github.com/Axway-API-Management-Plus/openapi-validator/issues/2
+    // validator.getExposurePath2SpecifiedPathMap().setMaxSize(5000);
+    
     // Get required parameters for the validation
     def payload = bodyAsString(msg.get('content.body'));
     def path = msg.get("http.request.path");
