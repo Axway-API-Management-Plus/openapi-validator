@@ -33,7 +33,7 @@ def invoke(msg)
     def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
     // Get required parameters for the validation
     def payload = bodyAsString(msg.get('content.body'));
-    def path = msg.get("api.method.path");
+    def path = msg.get("http.request.path");
     def verb = msg.get("http.request.verb");
     def queryParams = msg.get("params.query");
     def headers = msg.get("http.headers");
@@ -74,7 +74,7 @@ def invoke(msg)
     def apiId = msg.get("api.id");
     def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
     def payload = bodyAsString(msg.get('content.body'));
-    def path = msg.get("api.method.path");
+    def path = msg.get("http.request.path");
     def verb = msg.get("http.request.verb");
     def status = msg.get("http.response.status");
     def headers = msg.get("http.headers");
