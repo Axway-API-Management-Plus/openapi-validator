@@ -87,6 +87,20 @@ public class TestOpenAPIValidator
     }
     
     @Test
+    public void validDeleteRequestOrderBasedOnId() throws IOException
+    {
+    	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
+    	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
+    	
+    	String path = "/store/order/1234";
+    	String verb = "DELETE";
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("Content-Type", "application/json");
+    	
+    	Assert.assertTrue(validator.isValidRequest(null, verb, path, null, headers), "Request should be valid!");
+    }
+    
+    @Test
     public void validRequestExternalURLSwagger20() throws IOException
     {
     	OpenAPIValidator validator = OpenAPIValidator.getInstance("https://petstore.swagger.io/v2/swagger.json");
