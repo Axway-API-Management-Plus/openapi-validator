@@ -87,17 +87,43 @@ public class TestOpenAPIValidator
     }
     
     @Test
-    public void validDeleteRequestOrderBasedOnId() throws IOException
+    public void validRequestWithFullPathAndPathParameter() throws IOException
     {
     	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
     	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
     	
-    	String path = "/store/order/1234";
+    	validator.getExposurePath2SpecifiedPathMap().setMaxSize(2);
+    	
+    	String path = "/api/petstore/v3/store/order/1234";
     	String verb = "DELETE";
     	HeaderSet headers = new HeaderSet();
     	headers.addHeader("Content-Type", "application/json");
     	
     	Assert.assertTrue(validator.isValidRequest(null, verb, path, null, headers), "Request should be valid!");
+    	// Run it a second time, which should use the cached path
+    	Assert.assertTrue(validator.isValidRequest(null, verb, path, null, headers), "Request should be valid!");
+    	
+    	path = "/api/petstore/v3/store/order/5345";
+    	Assert.assertTrue(validator.isValidRequest(null, verb, path, null, headers), "Request should be valid!");
+    	
+    	path = "/api/petstore/v3/store/order/434312";
+    	Assert.assertTrue(validator.isValidRequest(null, verb, path, null, headers), "Request should be valid!");
+    	
+    	Assert.assertEquals(validator.getExposurePath2SpecifiedPathMap().size(), 2, "Cached paths should be two as the size is limited");
+    }
+    
+    @Test
+    public void invalidRequestWithFullPathAndPathParameter() throws IOException
+    {
+    	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
+    	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
+    	
+    	String path = "/api/petstore/v3/store/order/invalidPatameter";
+    	String verb = "DELETE";
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("Content-Type", "application/json");
+    	
+    	Assert.assertFalse(validator.isValidRequest(null, verb, path, null, headers));
     }
     
     @Test
