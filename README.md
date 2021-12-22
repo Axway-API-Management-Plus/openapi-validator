@@ -1,6 +1,7 @@
 # OpenAPI Validator for Axway API-Management
 
-This project provides a library that you can use to check the request or response against the API specification imported into the API Manager or an external API specification. Based on the API path, HTTP verb, and headers, the correct model is loaded from the API specification and used for verification.  
+This project provides a library that you can use to check the request or response against the API specification imported into the API Manager or an external API specification. Both the body (Request, Response) and the request parameters (Query, Path) are checked.  
+Based on the API path, HTTP verb, and headers, the correct model is loaded from the API specification and used for verification.  
 The following illustrates how it works and behaves in the API-Gateway at runtime:  
 
 ![OpenAPI Validation](images/openapi-validation-overview.png)
