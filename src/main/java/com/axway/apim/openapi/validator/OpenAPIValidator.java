@@ -129,7 +129,9 @@ public class OpenAPIValidator
 	    				 * For example: /great-petstore/pet/31233 will not find anything in the first attempt, because the 
 	    				 * API does not exist with /great-petstore in the API-Spec. This process is repeated at most 5 times.
 	    				 */
-	    				if(path.indexOf("/", 1)!=-1) {
+	    				if(path.indexOf("/", 1)==-1) {
+	    					break; // No need to continue as there is only a single path left (/petstore)
+	    				} else {
 	    					path = path.substring(path.indexOf("/", 1), path.length());
 	    				}
 	    			} else {
