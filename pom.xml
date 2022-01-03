@@ -28,7 +28,7 @@
 		<connection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</connection>
 		<developerConnection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</developerConnection>
 		<url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
-		<tag>v1.0.0</tag>
+		<tag>openapi-validator-1.2.0</tag>
 	</scm>
    
    <properties>
