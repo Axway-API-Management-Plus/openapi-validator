@@ -57,6 +57,6 @@ jobs:
           ls -la
       - name: Release perform
         run: |
-          mvn -B release:perform
+          mvn -B release:perform -Darguments="-Dmaven.deploy.skip=true"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
