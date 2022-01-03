@@ -109,7 +109,12 @@ public class TestOpenAPIValidator
     	path = "/api/petstore/v3/store/order/434312";
     	Assert.assertTrue(validator.isValidRequest(null, verb, path, null, headers), "Request should be valid!");
     	
-    	Assert.assertEquals(validator.getExposurePath2SpecifiedPathMap().size(), 2, "Cached paths should be two as the size is limited");
+    	path = "/api/petstore/v3/store/order/978978";
+    	Assert.assertTrue(validator.isValidRequest(null, verb, path, null, headers), "Request should be valid!");
+    	
+    	// Check the cache
+    	Assert.assertEquals(validator.getExposurePath2SpecifiedPathMap().size(), 2, "Cached paths should be two as the size is limited. "
+    			+ "Cached paths: " + validator.getExposurePath2SpecifiedPathMap().toString());
     }
     
     @Test
@@ -118,7 +123,7 @@ public class TestOpenAPIValidator
     	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
     	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
     	
-    	String path = "/api/petstore/v3/store/order/invalidPatameter";
+    	String path = "/api/petstore/v3/store/order/invalidParameter";
     	String verb = "DELETE";
     	HeaderSet headers = new HeaderSet();
     	headers.addHeader("Content-Type", "application/json");
@@ -139,6 +144,20 @@ public class TestOpenAPIValidator
     	
     	Assert.assertFalse(validator.isValidRequest(null, verb, path, null, headers));
     	// This time, it should be cached anyway
+    	Assert.assertFalse(validator.isValidRequest(null, verb, path, null, headers));
+    }
+    
+    @Test
+    public void invalidNoMatch2SpecAtAll() throws IOException
+    {
+    	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
+    	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
+    	
+    	String path = "/no/match";
+    	String verb = "GET";
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("Content-Type", "application/json");
+    	
     	Assert.assertFalse(validator.isValidRequest(null, verb, path, null, headers));
     }
     
@@ -213,5 +232,4 @@ public class TestOpenAPIValidator
     	
     	Assert.assertFalse(validator.isValidResponse(null, verb, path, status, headers), "Request should be not valid!");
     }
-    
 }

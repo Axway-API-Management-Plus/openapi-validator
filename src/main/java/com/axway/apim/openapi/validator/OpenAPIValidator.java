@@ -123,8 +123,15 @@ public class OpenAPIValidator
 	    			if(validationReport.getMessages().toString().contains("No API path found that matches request")) {
 	    				// Only cache the path, if a direct hit fails 
 	    				cachePath = true;
-	    				// Remove the first path (e.g. /petstore) from the path repeat the process
-	    				path = path.substring(path.indexOf("/", 1), path.length());
+	    				/*
+	    				 * If no match was found in the API-Spec for the given path, then we remove the first part of the 
+	    				 * path because the API might be exposed with a different path by the API-Manager than defined in the spec.
+	    				 * For example: /great-petstore/pet/31233 will not find anything in the first attempt, because the 
+	    				 * API does not exist with /great-petstore in the API-Spec. This process is repeated at most 5 times.
+	    				 */
+	    				if(path.indexOf("/", 1)!=-1) {
+	    					path = path.substring(path.indexOf("/", 1), path.length());
+	    				}
 	    			} else {
 	    				break;
 	    			}
@@ -257,6 +264,8 @@ public class OpenAPIValidator
 		}
 
 		public void setMaxSize(int maxSize) {
+			// Reset the cache if the maxSize is set
+			clear();
 			this.maxSize = maxSize;
 		}
 	}
