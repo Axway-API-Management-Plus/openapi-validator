@@ -129,7 +129,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>axway-apimcli-${project.version}</finalName>
+							<finalName> axway-openapi-validator-${project.version}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
 								<descriptor>lib/dist-release.xml</descriptor>
