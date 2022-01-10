@@ -31,7 +31,7 @@ def invoke(msg)
     // Get the ID of the API currently processed
     def apiId = msg.get("api.id");
     // Get/Create an OpenAPIValidator instance based on the API-ID
-    // For additional option please see: 
+    // For additional options please see: 
     // https://github.com/Axway-API-Management-Plus/openapi-validator#get-an-openapi-validator-instance
     def validator = OpenAPIValidator.getInstance(apiId, "apiadmin", "changeme");
     
