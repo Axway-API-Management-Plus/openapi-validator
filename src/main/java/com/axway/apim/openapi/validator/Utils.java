@@ -23,6 +23,8 @@ public class Utils {
 	
 	private static boolean useAPIGatewayTrace = true;
 	
+	private static boolean initTraceMode = true;
+	
 	public static void traceMessage(String message, TraceLevel level) {
 		traceMessage(message, null, level);
 	}
@@ -58,11 +60,13 @@ public class Utils {
 	}
 	
 	private static void setupTraceMode() {
+		if(!initTraceMode) return;
 		try {
-			Trace.debug("");
+			Trace.trace("Test OpenAPI validator Trace-Mode", Trace.TRACE_DATA);
 		} catch (UnsatisfiedLinkError | NoClassDefFoundError ex) {
 			useAPIGatewayTrace = false;
-		} catch (Exception ignore) {}; 
+		} catch (Exception ignore) {};
+		initTraceMode = false;
 	}
 	
 	public static String getContentStart(String someContent, int maxLength, boolean removeNewLines) {

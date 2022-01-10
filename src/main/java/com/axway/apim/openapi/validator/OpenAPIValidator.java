@@ -55,11 +55,13 @@ public class OpenAPIValidator
 	
 	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, String apiManagerUrl) throws Exception  {
 		if(instances4APIIDs.containsKey(apiId)) {
+			Utils.traceMessage("Using cached instance of OpenAPI validator for API-ID: " + apiId, TraceLevel.DEBUG);
 			return instances4APIIDs.get(apiId);
 		} else {
 			Utils.traceMessage("Creating new OpenAPI validator instance for given API-ID: '"+apiId+"'", TraceLevel.INFO);
 			OpenAPIValidator validator = new OpenAPIValidator(apiId, username, password, apiManagerUrl);
 			instances4APIIDs.put(apiId, validator);
+			Utils.traceMessage("Returning created OpenAPI validator for API-ID: " + apiId, TraceLevel.DEBUG);
 			return validator;
 		}
 	}
