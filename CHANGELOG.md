@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Unexpected log message java exception no longer appears
 
 ### Added
-- Add an option to use the orginally imported API-Specification for the validation [#4](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/4)
+- Add an option to use the originally imported API-Specification for the validation [#4](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/4)
 
 ## [1.2.0] 2021-12-21
 ### Fixed
