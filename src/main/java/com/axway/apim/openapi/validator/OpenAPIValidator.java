@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import com.atlassian.oai.validator.OpenApiInteractionValidator;
+import com.atlassian.oai.validator.OpenApiInteractionValidator.ApiLoadException;
 import com.atlassian.oai.validator.model.Request;
 import com.atlassian.oai.validator.model.Response;
 import com.atlassian.oai.validator.report.ValidationReport;
@@ -48,18 +49,26 @@ public class OpenAPIValidator
 		}
 	}
 	
-	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password) throws Exception  {
+	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, boolean useOriginalAPISpec) throws Exception  {
 		String apiManagerURL = "https://localhost:8075";
-		return getInstance(apiId, username, password, apiManagerURL);
+		return getInstance(apiId, username, password, apiManagerURL, useOriginalAPISpec);
 	}
 	
 	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, String apiManagerUrl) throws Exception  {
+		return getInstance(apiId, username, password, apiManagerUrl, false);
+	}
+	
+	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password) throws Exception  {
+		String apiManagerURL = "https://localhost:8075";
+		return getInstance(apiId, username, password, apiManagerURL, false);
+	}
+	
+	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, String apiManagerUrl, boolean useOriginalAPISpec) throws Exception  {
 		if(instances4APIIDs.containsKey(apiId)) {
 			Utils.traceMessage("Using cached instance of OpenAPI validator for API-ID: " + apiId, TraceLevel.DEBUG);
 			return instances4APIIDs.get(apiId);
 		} else {
-			Utils.traceMessage("Creating new OpenAPI validator instance for given API-ID: '"+apiId+"'", TraceLevel.INFO);
-			OpenAPIValidator validator = new OpenAPIValidator(apiId, username, password, apiManagerUrl);
+			OpenAPIValidator validator = new OpenAPIValidator(apiId, username, password, apiManagerUrl, useOriginalAPISpec);
 			instances4APIIDs.put(apiId, validator);
 			Utils.traceMessage("Returning created OpenAPI validator for API-ID: " + apiId, TraceLevel.DEBUG);
 			return validator;
@@ -81,13 +90,16 @@ public class OpenAPIValidator
 		}
 	}
     
-    private OpenAPIValidator(String apiId, String username, String password, String apiManagerUrl) throws Exception {
+    private OpenAPIValidator(String apiId, String username, String password, String apiManagerUrl, boolean useOriginalAPISpec) throws Exception {
 		super();
 		try {
 			Utils.traceMessage("Creating OpenAPIValidator for: [apiId: '"+apiId+"', username: '"+username+"', password: '*******', apiManagerUrl: '"+apiManagerUrl+"']", TraceLevel.INFO);
 			APIManagerSchemaProvider schemaProvider = new APIManagerSchemaProvider(apiManagerUrl, username, password);
+			schemaProvider.setUseOriginalAPISpec(useOriginalAPISpec);
 			String apiSpecification = schemaProvider.getSchema(apiId);
 			this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(apiSpecification).build();
+		} catch (ApiLoadException e) {
+			Utils.traceMessage("The obtained API-Specification is not compatible with the OpenAPI validator.", e, TraceLevel.ERROR);
 		} catch (Exception e) {
 			Utils.traceMessage("Error creating OpenAPIValidator for given API-ID: "+apiId, e, TraceLevel.ERROR);
 			throw e;
@@ -255,7 +267,7 @@ public class OpenAPIValidator
 	public void setPayloadLogMaxLength(int payloadLogMaxLength) {
 		this.payloadLogMaxLength = payloadLogMaxLength;
 	}
-	
+
 	static class MaxSizeHashMap<K, V> extends LinkedHashMap<K, V> {
 
 		private static final long serialVersionUID = 1L;

@@ -1,0 +1,205 @@
+{
+  "id" : "2fd818fd-62e9-4318-8632-cc914f5cc356",
+  "description" : "",
+  "deprecated" : false,
+  "apiVersion" : "1.0",
+  "swaggerVersion" : "1.1",
+  "basePath" : "http://basepath.org",
+  "resourcePath" : "/api",
+  "models" : {
+    "Item" : {
+      "type" : "object",
+      "required" : [ "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "The item's unique identifier"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "The item's name"
+        }
+      }
+    },
+    "ItemArray" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "Item"
+      }
+    }
+  },
+  "consumes" : [ ],
+  "produces" : [ ],
+  "name" : "My API",
+  "summary" : "",
+  "cors" : false,
+  "expired" : false,
+  "retirementDate" : 0,
+  "retired" : false,
+  "tags" : { },
+  "apis" : [ {
+    "path" : "/items",
+    "operations" : [ {
+      "id" : "00e60855-c6e5-447a-909b-a201686bbe12",
+      "httpMethod" : "GET",
+      "nickname" : "Get all item",
+      "summary" : "Gets a collection of item.",
+      "notes" : "Queries all item.  An optional parameter, *search* can be used to filter the list of *Item*.  On success, **200 OK** is returned, even if no items were found.",
+      "responseClass" : "Item",
+      "errorResponses" : [ {
+        "code" : 200,
+        "reason" : "OK"
+      }, {
+        "code" : 500,
+        "reason" : "Internal Server Error"
+      } ],
+      "consumes" : [ "application/json" ],
+      "produces" : [ "application/json" ],
+      "tags" : { },
+      "cors" : false,
+      "parameters" : [ {
+        "description" : "Text to use to find item",
+        "required" : false,
+        "name" : "search",
+        "dataType" : "string",
+        "paramType" : "query",
+        "allowMultiple" : true
+      } ]
+    }, {
+      "id" : "33617c1d-049a-49f1-a331-1fb5b22455fb",
+      "httpMethod" : "POST",
+      "nickname" : "Create item",
+      "summary" : "Creates a new instance of item.",
+      "notes" : "The item can only be created if you have permissions to create.  Otherwise, a **403 Forbidden** error is returned. If the *body* parameter is not a valid *Item*, then a **400 Bad Request** error is returned.  On success, **201 Created** is returned.",
+      "responseClass" : "Item",
+      "errorResponses" : [ {
+        "code" : 201,
+        "reason" : "Created"
+      }, {
+        "code" : 400,
+        "reason" : "Bad Request"
+      }, {
+        "code" : 403,
+        "reason" : "Forbidden"
+      }, {
+        "code" : 500,
+        "reason" : "Internal Server Error"
+      } ],
+      "consumes" : [ "application/json" ],
+      "produces" : [ "application/json" ],
+      "tags" : { },
+      "cors" : false,
+      "parameters" : [ {
+        "description" : "The item to create",
+        "required" : true,
+        "name" : "body",
+        "dataType" : "Item",
+        "paramType" : "body",
+        "allowMultiple" : false
+      } ]
+    } ]
+  }, {
+    "path" : "/items/{id}",
+    "operations" : [ {
+      "id" : "871df564-a03c-414b-9e3e-f8509de5db01",
+      "httpMethod" : "PUT",
+      "nickname" : "Update item",
+      "summary" : "Updates an existing item by id.",
+      "notes" : "The item can only be updated if you have permissions to update.  Otherwise, a **403 Forbidden** error is returned. If the *body* parameter is not a valid *Item*, then a **400 Bad Request** error is returned.  On success, **200 OK** is returned.\n",
+      "responseClass" : "Item",
+      "errorResponses" : [ {
+        "code" : 200,
+        "reason" : "OK"
+      }, {
+        "code" : 400,
+        "reason" : "Bad Request"
+      }, {
+        "code" : 403,
+        "reason" : "Forbidden"
+      }, {
+        "code" : 500,
+        "reason" : "Internal Server Error"
+      } ],
+      "consumes" : [ "application/json" ],
+      "produces" : [ "application/json" ],
+      "tags" : { },
+      "cors" : false,
+      "parameters" : [ {
+        "description" : "The item identifier",
+        "required" : true,
+        "name" : "id",
+        "dataType" : "string",
+        "paramType" : "path",
+        "allowMultiple" : false
+      }, {
+        "description" : "The item to update",
+        "required" : true,
+        "name" : "body",
+        "dataType" : "Item",
+        "paramType" : "body",
+        "allowMultiple" : false
+      } ]
+    }, {
+      "id" : "6f3990ba-a203-4c61-9b72-66ff4105a63b",
+      "httpMethod" : "GET",
+      "nickname" : "Get item",
+      "summary" : "Gets an existing item by id.",
+      "notes" : "Gets item by id.",
+      "responseClass" : "Item",
+      "errorResponses" : [ {
+        "code" : 200,
+        "reason" : "OK"
+      }, {
+        "code" : 404,
+        "reason" : "Not found"
+      }, {
+        "code" : 500,
+        "reason" : "Internal Server Error"
+      } ],
+      "consumes" : [ "application/json" ],
+      "produces" : [ "application/json" ],
+      "tags" : { },
+      "cors" : false,
+      "parameters" : [ {
+        "description" : "The item identifier",
+        "required" : true,
+        "name" : "id",
+        "dataType" : "string",
+        "paramType" : "path",
+        "allowMultiple" : false
+      } ]
+    }, {
+      "id" : "3edfdfd9-d8d7-4aea-9a37-98d849a908e5",
+      "httpMethod" : "DELETE",
+      "nickname" : "Delete item",
+      "summary" : "Delete an existing item by id.",
+      "notes" : "The item can only be updated if you have permissions to delete.  Otherwise, a **403 Forbidden** error is returned. If the *id* parameter is not valid or not found, then a **400 Bad Request** error is returned.  On success, **204 No Content** is returned.",
+      "responseClass" : "void",
+      "errorResponses" : [ {
+        "code" : 204,
+        "reason" : "No Content"
+      }, {
+        "code" : 403,
+        "reason" : "Forbidden"
+      }, {
+        "code" : 500,
+        "reason" : "Internal Server Error"
+      } ],
+      "consumes" : [ "application/json" ],
+      "produces" : [ "application/json" ],
+      "tags" : { },
+      "cors" : false,
+      "parameters" : [ {
+        "description" : "The item identifier",
+        "required" : true,
+        "name" : "id",
+        "dataType" : "string",
+        "paramType" : "path",
+        "allowMultiple" : false
+      } ]
+    } ]
+  } ],
+  "createDate" : 1641812998866,
+  "accessGrantedDate" : 0,
+  "type" : "rest"
+}

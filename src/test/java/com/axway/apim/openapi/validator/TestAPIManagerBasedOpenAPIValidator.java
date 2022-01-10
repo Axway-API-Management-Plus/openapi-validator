@@ -25,8 +25,8 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	@SuppressWarnings("resource")
 	@Test
 	public void getAPISpecForValidApiId() throws Exception {
-		new MockServerClient("127.0.01", 1080)
-		.when(request()
+		MockServerClient mock = new MockServerClient("127.0.01", 1080);
+		mock.when(request()
 				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
 				.withQueryStringParameter("swaggerVersion", "2.0")
 				)
@@ -38,10 +38,10 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	}
 	
 	@SuppressWarnings("resource")
-	@Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error getting API-Specification from API-Manager")
+	@Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error getting API-Specification from API-Manager.")
 	public void getAPISpecForInvalidApiId() throws Exception {
-		new MockServerClient("127.0.01", 1080)
-		.when(request()
+		MockServerClient mock = new MockServerClient("127.0.01", 1080);
+		mock.when(request()
 				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-99999999999")
 				.withQueryStringParameter("swaggerVersion", "2.0")
 				)
@@ -58,15 +58,13 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	public void getAPISpecForValidOAS30ApiId() throws Exception {
 		String failedToDownloadAPI = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "FailedToDownloadAPI.json"));
 		// Initially trying to download Swagger 2.0
-		new MockServerClient("127.0.01", 1080)
-		.when(request()
+		MockServerClient mock = new MockServerClient("127.0.01", 1080);
+		mock.when(request()
 				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
-				.withQueryStringParameter("swaggerVersion", "2.0")
-				)
-		.respond(response().withStatusCode(500).withBody(new JsonBody(failedToDownloadAPI))
-		);
-		new MockServerClient("127.0.01", 1080)
-		.when(request()
+				.withQueryStringParameter("swaggerVersion", "2.0"))
+			.respond(response().withStatusCode(500).withBody(new JsonBody(failedToDownloadAPI))
+				);
+		mock.when(request()
 				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
 				.withQueryStringParameter("swaggerVersion", "3.0")
 				)
@@ -79,20 +77,64 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	}
 	
 	@SuppressWarnings("resource")
+	@Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error loading Backend-API-ID from API Manager for API: INVALID-API-ID")
+	public void getBackendAPISpecForInvalidApiId() throws Exception {
+		MockServerClient mock = new MockServerClient("127.0.01", 1080);
+		mock.when(request()
+				.withPath("/api/portal/v1.3/proxies/INVALID-API-ID"))
+			.respond(response().withStatusCode(403).withBody(new JsonBody("{\"errors\":[{\"code\":403,\"message\":\"Forbidden\"}]}"))
+		);
+
+		APIManagerSchemaProvider provider = new APIManagerSchemaProvider("https://localhost:1080", "user", "password");
+		provider.setUseOriginalAPISpec(true);
+		String apiSpec = provider.getSchema("INVALID-API-ID");
+		Assert.assertEquals(apiSpec, "{ This is supposed to be a swagger-file }");
+	}
+	
+	@SuppressWarnings("resource")
 	@Test
-	public void testOpenAPIBasedOnAPIManagerApiID() throws Exception {
+	public void testOpenAPISpecification() throws Exception {
 		String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
 		
-		new MockServerClient("127.0.01", 1080)
-		.when(request()
+		MockServerClient mock = new MockServerClient("127.0.01", 1080);
+		mock.when(request()
 				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c888")
-				.withQueryStringParameter("swaggerVersion", "2.0")
-				)
+				.withQueryStringParameter("swaggerVersion", "2.0"))
+			.respond(response().withStatusCode(200).withBody(new JsonBody(swagger))
+		);
+		OpenAPIValidator validator = OpenAPIValidator.getInstance("d45571e4-ec7d-444c-af09-11265d75c888", "user", "password", "https://localhost:1080");
+		
+    	String payload = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "ValidPostPetPayload.json"));
+    	String path = "/pet";
+    	String verb = "POST";
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("Content-Type", "application/json");
+		
+		boolean isValid = validator.isValidRequest(payload, verb, path, null, headers);
+		
+		Assert.assertTrue(isValid, "Request is supposed to be valid");
+	}
+	
+	@SuppressWarnings("resource")
+	@Test
+	public void testOriginalAPISpecification() throws Exception {
+		String apiProxy = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "FrontAPIProxyResponse.json"));
+		String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "OriginallyImportedAPISpecification.json"));
+		
+		MockServerClient mock = new MockServerClient("127.0.01", 1080);
+		mock.when(request()
+				.withPath("/api/portal/v1.3/proxies/d45571e4-ec7d-444c-af09-11265d75c888") )
+		.respond(response()
+				.withStatusCode(200)
+				.withBody(new JsonBody(apiProxy)));
+		mock.when(request()
+				.withPath("/api/portal/v1.3/apirepo/ab9e6a41-cb93-4a9b-9faf-74a901f14922/download")
+				.withQueryStringParameter("original", "true"))
 		.respond(response()
 				.withStatusCode(200)
 				.withBody(new JsonBody(swagger))
-		);
-		OpenAPIValidator validator = OpenAPIValidator.getInstance("d45571e4-ec7d-444c-af09-11265d75c888", "user", "password", "https://localhost:1080");
+			);
+		OpenAPIValidator validator = OpenAPIValidator.getInstance("d45571e4-ec7d-444c-af09-11265d75c888", "user", "password", "https://localhost:1080", true);
 		
     	String payload = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "ValidPostPetPayload.json"));
     	String path = "/pet";

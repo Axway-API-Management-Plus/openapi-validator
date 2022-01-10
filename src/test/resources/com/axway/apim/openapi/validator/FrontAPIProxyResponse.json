@@ -1,0 +1,95 @@
+{
+    "id": "fb9cd3b6-037a-4ce3-a1b8-681c133ed03f",
+    "organizationId": "439ec2bd-0350-459c-8df3-bb6d14da6bc8",
+    "apiId": "ab9e6a41-cb93-4a9b-9faf-74a901f14922",
+    "name": "IBAN Validator",
+    "version": "1.0.2",
+    "apiRoutingKey": null,
+    "vhost": null,
+    "path": "/isl-partner/PartnerServiceV1",
+    "descriptionType": "original",
+    "descriptionManual": null,
+    "descriptionMarkdown": null,
+    "descriptionUrl": null,
+    "summary": null,
+    "retired": false,
+    "expired": false,
+    "image": null,
+    "retirementDate": 0,
+    "deprecated": false,
+    "state": "unpublished",
+    "createdOn": 1641812623916,
+    "createdBy": "f60e3e05-cdf3-4b70-affc-4cb61a10f4bb",
+    "corsProfiles": [
+        {
+            "name": "_default",
+            "isDefault": true,
+            "origins": [
+                "*"
+            ],
+            "allowedHeaders": [],
+            "exposedHeaders": [
+                "X-CorrelationID"
+            ],
+            "supportCredentials": false,
+            "maxAgeSeconds": 0
+        }
+    ],
+    "securityProfiles": [
+        {
+            "name": "_default",
+            "isDefault": true,
+            "devices": [
+                {
+                    "name": "Pass Through",
+                    "type": "passThrough",
+                    "order": 1,
+                    "properties": {
+                        "subjectIdFieldName": "Pass Through",
+                        "removeCredentialsOnSuccess": "true"
+                    }
+                }
+            ]
+        }
+    ],
+    "authenticationProfiles": [
+        {
+            "name": "_default",
+            "isDefault": true,
+            "parameters": {
+                "_id_": 0
+            },
+            "type": "none"
+        }
+    ],
+    "inboundProfiles": {
+        "_default": {
+            "securityProfile": "_default",
+            "corsProfile": "_default",
+            "monitorAPI": true,
+            "monitorSubject": "authentication.subject.id"
+        }
+    },
+    "outboundProfiles": {
+        "_default": {
+            "authenticationProfile": "_default",
+            "routeType": "proxy",
+            "requestPolicy": null,
+            "responsePolicy": null,
+            "routePolicy": null,
+            "faultHandlerPolicy": null,
+            "apiId": null,
+            "apiMethodId": null,
+            "parameters": []
+        }
+    },
+    "serviceProfiles": {
+        "_default": {
+            "apiId": "ab9e6a41-cb93-4a9b-9faf-74a901f14922",
+            "basePath": "http://deala00428.emea.zurich.dev:20050"
+        }
+    },
+    "caCerts": [],
+    "tags": {},
+    "customProperty3": "false"
+}
