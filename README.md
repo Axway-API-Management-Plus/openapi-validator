@@ -50,6 +50,16 @@ def invoke(msg)
         def rc = validator.isValidRequest(payload, verb, path, queryParams, headers);
         Trace.info('rc: ' + rc);
         return rc;
+        // If you would like to return the validation messages, use the following method, that returns you a 
+        // ValidationReport object.
+        // def validationReport = validator.validateRequest(payload, verb, path, queryParams, headers);
+        // if (validationReport.hasErrors() ) {
+        //    msg.put("circuit.failure.reason", validationReport.getMessages() );
+        //    msg.put("http.response.status", 400 );
+        //    return false;
+        // } else {
+        //   return true;
+        // }
     } catch (Exception e) {
         Trace.error('Error validating request', e);
         return false;
@@ -90,6 +100,16 @@ def invoke(msg)
     try {
         def rc = validator.isValidResponse(payload, verb, path, status, headers);
         return rc;
+        // If you would like to return the validation messages, use the following method, that returns you a 
+        // ValidationReport object.
+        // def validationReport = validator.validateResponse(payload, verb, path, status, headers);
+        // if (validationReport.hasErrors() ) {
+        //    msg.put("circuit.failure.reason", validationReport.getMessages() );
+        //    msg.put("http.response.status", 400 );
+        //    return false;
+        // } else {
+        //   return true;
+        // }
     } catch (Exception e) {
         Trace.error('Error validating response', e);
         return false;
