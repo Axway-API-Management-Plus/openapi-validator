@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.4.0] 2022-03-28
+### Fixed
+- Making access to the validation report documented and easier [#5](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/5)
+
 ## [1.3.0] 2022-01-10
 ### Fixed
 - Unexpected log message java exception no longer appears
