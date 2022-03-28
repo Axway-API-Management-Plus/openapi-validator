@@ -107,6 +107,15 @@ public class OpenAPIValidator
 	}
     
     public boolean isValidRequest(String payload, String verb, String path, QueryStringHeaderSet queryParams, HeaderSet headers) {
+    	ValidationReport validationReport = validateRequest(payload, verb, path, queryParams, headers);
+    	if (validationReport.hasErrors()) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+    
+    public ValidationReport validateRequest(String payload, String verb, String path, QueryStringHeaderSet queryParams, HeaderSet headers) {
     	Utils.traceMessage("Validate request: [verb: "+verb+", path: '"+path+"', payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
     	ValidationReport validationReport = null;
     	String originalPath = path;
@@ -124,7 +133,7 @@ public class OpenAPIValidator
     			validationReport = (ValidationReport)exposurePath2SpecifiedPathMap.get(path);
     		} else {
 	    		// In that case perform the validation based on the cached path
-	    		validationReport = validateRequest(payload, verb, (String)exposurePath2SpecifiedPathMap.get(path), queryParams, headers);
+	    		validationReport = _validateRequest(payload, verb, (String)exposurePath2SpecifiedPathMap.get(path), queryParams, headers);
     		}
     	} else {
     		// Otherwise try to find the belonging specified path
@@ -132,7 +141,7 @@ public class OpenAPIValidator
 	    		if(cachePath) {
 	    			Utils.traceMessage("Retrying validation with reduced path: '"+path+"']' ("+i+"/5)", TraceLevel.INFO);
 	    		}
-	    		validationReport = validateRequest(payload, verb, path, queryParams, headers);
+	    		validationReport = _validateRequest(payload, verb, path, queryParams, headers);
 	    		if(validationReport.hasErrors()) {
 	    			if(validationReport.getMessages().toString().contains("No API path found that matches request")) {
 	    				// Only cache the path, if a direct hit fails 
@@ -164,12 +173,7 @@ public class OpenAPIValidator
 				}
 			}
     	}
-    	
-    	if (validationReport.hasErrors()) {
-    		return false;
-    	} else {
-    		return true;
-    	}
+    	return validationReport;
     }
     
     public boolean isValidResponse(String payload, String verb, String path, int status, HeaderSet headers) {
@@ -181,8 +185,12 @@ public class OpenAPIValidator
     		return true;
     	}
     }
+    
+    public ValidationReport validateResponse(final String payload, String verb, String path, final int status, final HeaderSet headers) {
+    	return _validateResponse(payload, verb, path, status, headers);
+    }
 
-	public ValidationReport validateRequest(final String payload, final String verb, final String path, final QueryStringHeaderSet queryParams, final HeaderSet headers) {
+    private ValidationReport _validateRequest(final String payload, final String verb, final String path, final QueryStringHeaderSet queryParams, final HeaderSet headers) {
 		Request request = new Request() {
 			@Override
 			public String getPath() {
@@ -235,7 +243,7 @@ public class OpenAPIValidator
     	return validationReport;
     }
 	
-	public ValidationReport validateResponse(final String payload, String verb, String path, final int status, final HeaderSet headers) {
+	private ValidationReport _validateResponse(final String payload, String verb, String path, final int status, final HeaderSet headers) {
 		Response response = new Response() {
 			@Override
 			public int getStatus() {
