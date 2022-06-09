@@ -84,12 +84,14 @@ public class Utils {
     	if(headers==null) return result;
 		HeaderEntry headerValues = headers.getHeaderEntry(name);
 		if(headerValues==null) {
+			// Check if the requested header was the content-type header which we default to application/json
 			if(name.toLowerCase().equals("content-type")) {
-				// For any reason, sometime the API-Gateway at runtime removes the Content-Type header from the attribute http.headers
-				traceMessage("Header: Content-Type not found. Defaulting to application/json.", TraceLevel.INFO);
+				// For any reason, sometimes the API-Gateway at runtime removes the Content-Type header from the attribute http.headers
+				traceMessage("WARN - Header: Content-Type not found. Defaulting to application/json.", TraceLevel.DEBUG);
 				result.add("application/json");
 				return result;
 			} else {
+				traceMessage("Header: "+name+" not found.", TraceLevel.DEBUG);
 				return result; // Header might not be set
 			}
 		}
