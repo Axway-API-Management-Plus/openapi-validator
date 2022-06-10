@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.4.1] 2022-06-09
 ### Changed
-- If content-type header could not be found is not logged on DEBUG instead of DATA [#7](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/7)
+- If Content-Type header could not be found is not logged on DEBUG instead of DATA [#7](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/7)
 
 ## [1.4.0] 2022-03-28
 ### Fixed
