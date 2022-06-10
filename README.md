@@ -45,7 +45,10 @@ def invoke(msg)
     def verb = msg.get("http.request.verb");
     def queryParams = msg.get("params.query");
     def headers = msg.get("http.headers");
+    def contentHeaders = msg.get("http.content.headers");
     try {
+        // Content-Headers contains the required Content-Type header - Merge them into the headers attribute
+        headers.addHeaders(contentHeaders);
         // Call the validator itself
         def rc = validator.isValidRequest(payload, verb, path, queryParams, headers);
         Trace.info('rc: ' + rc);
@@ -96,8 +99,11 @@ def invoke(msg)
     def verb = msg.get("http.request.verb");
     def status = msg.get("http.response.status");
     def headers = msg.get("http.headers");
+    def contentHeaders = msg.get("http.content.headers");
     Trace.debug('Calling OpenAPIValidator: [path: ' + path + ', verb: ' + verb + ', status: ' + status + ']');
     try {
+        // Content-Headers contains the required Content-Type header - Merge them into the headers attribute
+        headers.addHeaders(contentHeaders);
         def rc = validator.isValidResponse(payload, verb, path, status, headers);
         return rc;
         // If you would like to return the validation messages, use the following method, that returns you a 
