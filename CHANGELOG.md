@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] 2022-06-23
+### Added
+- If the Content-Type header is duplicated, only the first header is taken and all others are deleted.
+
 ## [1.4.1] 2022-06-09
 ### Changed
 - If Content-Type header could not be found is not logged on DEBUG instead of DATA [#7](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/7)
