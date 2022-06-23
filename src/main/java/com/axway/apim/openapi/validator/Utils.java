@@ -2,7 +2,9 @@ package com.axway.apim.openapi.validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,5 +103,22 @@ public class Utils {
 			result.add(header.toString());
 		}
 		return result;
+    }
+    
+    /**
+     * @param headers that might contain a duplicated Content-Type header
+     */
+    public static void removeDuplicateContentTypeHeader(HeaderSet headers) {
+    	HeaderEntry contentTypeHeader = headers.getHeaderEntry("Content-Type");
+    	if(contentTypeHeader != null && contentTypeHeader.size()>1) {
+    		traceMessage("WARN - Header: Multiple Content-Type headers found. Remove all but the first header.", TraceLevel.DEBUG);
+    		// Get the first header
+    		Header first = contentTypeHeader.get(0);
+    		// Clear all others
+    		contentTypeHeader.clear();
+    		// Add only one header
+    		contentTypeHeader.add(first);
+    	}
+    	return;
     }
 }

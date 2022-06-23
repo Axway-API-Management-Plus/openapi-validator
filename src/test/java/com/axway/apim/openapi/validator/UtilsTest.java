@@ -6,6 +6,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.reporters.Files;
 
+import com.vordel.mime.HeaderSet;
+
 public class UtilsTest {
 	
 	private static final String TEST_PACKAGE = "com/axway/apim/openapi/validator/";
@@ -22,5 +24,16 @@ public class UtilsTest {
 		String payload = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "ValidGetPetFindByStatusResponse.json"));
 		String payloadStart = Utils.getContentStart(payload, 40, true);
 		Assert.assertEquals(payloadStart, "[  {    \"id\": 13973,    \"category\": {   ...(truncated)");
+	}
+	
+	@Test
+	public void testRemoveDuplicateContentTypeHeader() throws IOException {
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("content-Type", "application/json");
+    	headers.addHeader("Content-type", "application/xml");
+    	Assert.assertEquals(headers.getHeadersSize("Content-Type"), 2);
+    	Utils.removeDuplicateContentTypeHeader(headers);
+    	Assert.assertEquals(headers.getHeadersSize("Content-Type"), 1);
+    	Assert.assertEquals(headers.getHeader("Content-Type"), "application/json");
 	}
 }
