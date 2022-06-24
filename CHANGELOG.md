@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Now query parameters are by default decoded before send to the validator (e.g. otr%C3%B3s -> otrós)
 
+### Changed
+- Dropped support for Java-Version 1.7. Minimal Java-Version is 1.8
+
 ## [1.5.0] 2022-06-23
 ### Added
 - If the Content-Type header is duplicated, only the first header is taken and all others are deleted.
