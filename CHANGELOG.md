@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.6.0] 2022-06-24
+### Added
+- Now query parameters are by default decoded before send to the validator (e.g. otr%C3%B3s -> otrós)
+
 ## [1.5.0] 2022-06-23
 ### Added
 - If the Content-Type header is duplicated, only the first header is taken and all others are deleted.

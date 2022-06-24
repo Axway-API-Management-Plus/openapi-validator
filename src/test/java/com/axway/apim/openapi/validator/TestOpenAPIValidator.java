@@ -232,4 +232,31 @@ public class TestOpenAPIValidator
     	
     	Assert.assertFalse(validator.isValidResponse(null, verb, path, status, headers), "Request should be not valid!");
     }
+    
+    @Test
+    public void testSpecialCharsQueryParam() throws IOException
+    {
+    	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
+    	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
+    	
+    	String path = "/user/login";
+    	String verb = "GET";
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("Content-Type", "application/json");
+    	QueryStringHeaderSet queryParams = new QueryStringHeaderSet();
+    	queryParams.addHeader("username", "otr%C3%B3s");
+    	queryParams.addHeader("password", "otrós");
+    	
+    	Assert.assertTrue(validator.isValidRequest(null, verb, path, queryParams, headers));
+    	
+    	validator.setDecodeQueryParams(false);
+    	
+    	QueryStringHeaderSet queryParams2 = new QueryStringHeaderSet();
+    	queryParams2.addHeader("username", "otr%C3%B3s");
+    	queryParams2.addHeader("password", "otrós");
+    	
+    	Assert.assertFalse(validator.isValidRequest(null, verb, path, queryParams2, headers));
+    }
+    
+    
 }

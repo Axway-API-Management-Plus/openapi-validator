@@ -1,6 +1,8 @@
 package com.axway.apim.openapi.validator;
 
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +37,8 @@ public class OpenAPIValidator
 	private MaxSizeHashMap<String, Object> exposurePath2SpecifiedPathMap = new MaxSizeHashMap<String, Object>();
 	
 	private int payloadLogMaxLength = 40;
+	
+	private boolean decodeQueryParams = true;
 	
 	public static synchronized OpenAPIValidator getInstance(String openAPISpec)  {
 		int hashCode = openAPISpec.hashCode();
@@ -219,6 +223,9 @@ public class OpenAPIValidator
 			public Collection<String> getQueryParameterValues(String name) {
 				if(queryParams==null) return Collections.emptyList();
 				ArrayList<String> values = queryParams.getHeaderValues(name);
+				if(decodeQueryParams) {
+					values.replaceAll(headerValue -> URLDecoder.decode(headerValue, StandardCharsets.UTF_8));
+				}
 				return (Collection<String>) ((values == null) ? Collections.emptyList() : values);
 			}
 			
@@ -296,5 +303,9 @@ public class OpenAPIValidator
 
 	public MaxSizeHashMap<String, Object> getExposurePath2SpecifiedPathMap() {
 		return exposurePath2SpecifiedPathMap;
+	}
+
+	public void setDecodeQueryParams(boolean decodeQueryParams) {
+		this.decodeQueryParams = decodeQueryParams;
 	}
 }

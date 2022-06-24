@@ -39,6 +39,10 @@ def invoke(msg)
     // https://github.com/Axway-API-Management-Plus/openapi-validator/issues/2
     // validator.getExposurePath2SpecifiedPathMap().setMaxSize(5000);
     
+    // By default query parameters are decoded by default. You may turn this off for each 
+    // individual validator instance
+    // validator.setDecodeQueryParams(false);
+    
     // Get required parameters for the validation
     def payload = bodyAsString(msg.get('content.body'));
     def path = msg.get("http.request.path");

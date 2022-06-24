@@ -738,14 +738,18 @@
             "in": "query",
             "description": "The user name for login",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 5
           },
           {
             "name": "password",
             "in": "query",
             "description": "The password for login in clear text",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 5
           }
         ],
         "responses": {
