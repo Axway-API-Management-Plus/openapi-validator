@@ -1,5 +1,6 @@
 package com.axway.apim.openapi.validator;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -224,7 +225,14 @@ public class OpenAPIValidator
 				if(queryParams==null) return Collections.emptyList();
 				ArrayList<String> values = queryParams.getHeaderValues(name);
 				if(decodeQueryParams) {
-					values.replaceAll(headerValue -> URLDecoder.decode(headerValue, StandardCharsets.UTF_8));
+					values.replaceAll(headerValue -> {
+						try {
+							return URLDecoder.decode(headerValue, StandardCharsets.UTF_8.toString());
+						} catch (UnsupportedEncodingException e) {
+							Utils.traceMessage("Error decoding headerValue: " + headerValue + ". Error: " + e.getMessage(), TraceLevel.ERROR);
+							return headerValue;
+						}
+					});
 				}
 				return (Collection<String>) ((values == null) ? Collections.emptyList() : values);
 			}
