@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.6.0] 2022-06-24
 ### Added
-- Now query parameters are by default decoded before send to the validator (e.g. otr%C3%B3s -> otrÛs)
+- Now query parameters are by default decoded before send to the validator (e.g. otr%C3%B3s -> otr√≥s)
 
 ### Changed
 - Dropped support for Java-Version 1.7. Minimal Java-Version is 1.8
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.4.1] 2022-06-09
 ### Changed
-- If Content-Type header could not be found is not logged on DEBUG instead of DATA [#7](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/7)
+- If Content-Type header could not be found is now logged on DEBUG instead of DATA [#7](https://github.com/Axway-API-Management-Plus/openapi-validator/issues/7)
 
 ## [1.4.0] 2022-03-28
 ### Fixed
