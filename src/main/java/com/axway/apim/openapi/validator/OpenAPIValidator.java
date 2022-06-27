@@ -245,6 +245,7 @@ public class OpenAPIValidator
 			
 			@Override
 			public Collection<String> getHeaderValues(String name) {
+				Utils.removeDuplicateContentTypeHeader(headers);
 				return Utils.getHeaderValues(headers, name);
 			}
 		};
