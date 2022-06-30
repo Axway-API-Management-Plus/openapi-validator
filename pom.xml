@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.github.axway-api-management-plus.openapi-validator</groupId>
    <artifactId>openapi-validator</artifactId>
-   <version>1.6.3-SNAPSHOT</version>
+   <version>1.6.3</version>
    <name>openapi-validator</name>
 
    <url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
@@ -28,7 +28,7 @@
 		<connection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</connection>
 		<developerConnection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</developerConnection>
 		<url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
-	  <tag>openapi-validator-1.7.0</tag>
+	  <tag>openapi-validator-1.6.3</tag>
   </scm>
    
    <properties>
