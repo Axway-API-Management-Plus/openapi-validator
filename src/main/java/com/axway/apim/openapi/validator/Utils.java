@@ -89,7 +89,7 @@ public class Utils {
 			// Check if the requested header was the content-type header which we default to application/json
 			if(name.toLowerCase().equals("content-type")) {
 				// For any reason, sometimes the API-Gateway at runtime removes the Content-Type header from the attribute http.headers
-				traceMessage("WARN - Header: Content-Type not found. Defaulting to application/json.", TraceLevel.DEBUG);
+				traceMessage("WARN - Header: Content-Type not found. Default to application/json.", TraceLevel.DEBUG);
 				result.add("application/json");
 				return result;
 			} else {
@@ -106,18 +106,19 @@ public class Utils {
     }
     
     /**
-     * @param headers that might contain a duplicated Content-Type header
+     * The content type may have been merged into http.headers by the policy scripting filter, 
+     * but additionally exists in http.content.headers. 
+     * This leads to a duplication of the Content-Type header in the backend request, 
+     * because the API gateway appends the http.content.header additionally. 
+     * Therefore, the Content-Type header is removed here again after it was 
+     * used for validation.
+     * @param headers that might contain the Content-Type header
      */
-    public static void removeDuplicateContentTypeHeader(HeaderSet headers) {
+    public static void removeContentTypeHeader(HeaderSet headers) {
     	HeaderEntry contentTypeHeader = headers.getHeaderEntry("Content-Type");
-    	if(contentTypeHeader != null && contentTypeHeader.size()>1) {
-    		traceMessage("WARN - Header: Multiple Content-Type headers found. Remove all but the first header.", TraceLevel.DEBUG);
-    		// Get the first header
-    		Header first = contentTypeHeader.get(0);
-    		// Clear all others
-    		contentTypeHeader.clear();
-    		// Add only one header
-    		contentTypeHeader.add(first);
+    	if(contentTypeHeader != null) {
+    		traceMessage("INFO - Remove Content-Type header as it exists in the http.content.headers attribute and this would result in a duplicate.", TraceLevel.DEBUG);
+    		headers.remove("Content-Type");
     	}
     	return;
     }

@@ -245,7 +245,6 @@ public class OpenAPIValidator
 			
 			@Override
 			public Collection<String> getHeaderValues(String name) {
-				Utils.removeDuplicateContentTypeHeader(headers);
 				return Utils.getHeaderValues(headers, name);
 			}
 		};
@@ -256,6 +255,8 @@ public class OpenAPIValidator
     			Utils.traceMessage(message.getMessage(), TraceLevel.valueOf(message.getLevel().name()));
     		}
     	}
+    	// Finally remove the Content-Type header if exists, as it exists additionally in http.content.headers
+    	Utils.removeContentTypeHeader(headers);
     	return validationReport;
     }
 	
