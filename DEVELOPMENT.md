@@ -1,6 +1,6 @@
 # Create a release
 
-The release is not created via the GitHub action but locally via Maven and then the package is imported into a release on GibtHub.
+The release is not created via the GitHub action but locally via Maven and then the package is imported/uploaded into a release on GitHub.
 
 ```
 mvn release:prepare
