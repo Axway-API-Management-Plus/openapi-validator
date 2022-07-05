@@ -224,6 +224,7 @@ public class OpenAPIValidator
 			public Collection<String> getQueryParameterValues(String name) {
 				if(queryParams==null) return Collections.emptyList();
 				ArrayList<String> values = queryParams.getHeaderValues(name);
+				if(values == null) return Collections.emptyList();
 				if(decodeQueryParams) {
 					values.replaceAll(headerValue -> {
 						try {

@@ -87,6 +87,21 @@ public class TestOpenAPIValidator
     }
     
     @Test
+    public void invalidGetRequestPetsByStatusWithoutQueryParam() throws IOException
+    {
+    	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
+    	OpenAPIValidator validator = OpenAPIValidator.getInstance(swagger);
+    	
+    	String path = "/pet/findByStatus";
+    	QueryStringHeaderSet queryParams = new QueryStringHeaderSet();
+    	String verb = "GET";
+    	HeaderSet headers = new HeaderSet();
+    	headers.addHeader("Content-Type", "application/json");
+    	
+    	Assert.assertFalse(validator.isValidRequest(null, verb, path, queryParams, headers), "Request is invalid!");
+    }
+    
+    @Test
     public void validRequestWithFullPathAndPathParameter() throws IOException
     {
     	String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));

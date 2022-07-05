@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.6.3] 2022-07-05
+### Fixed
+- NPE when validating method with query parameters without providing the correct query parameter as part of the request
+
 ## [1.6.2] 2022-06-30
 ### Fixed
 - If a Content-Type header is set, it is used for validation and then removed, because it additionally exists in the http.content.headers attribute.
