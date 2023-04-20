@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.github.axway-api-management-plus.openapi-validator</groupId>
    <artifactId>openapi-validator</artifactId>
-   <version>1.6.5-SNAPSHOT</version>
+   <version>1.6.5</version>
    <name>openapi-validator</name>
 
    <url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
@@ -35,7 +35,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
-      <apigateway.version>7.7.20200930</apigateway.version>
+      <apigateway.version>7.7.20230228</apigateway.version>
    </properties>
    
    <repositories>
@@ -82,7 +82,7 @@
          <artifactId>vordel-core-runtime</artifactId>
          <version>${apigateway.version}</version>
       </dependency>
-      
+     
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -141,6 +141,15 @@
 					</execution>
 				</executions>
 			</plugin>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>3.8.0</version>
+      <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+      </configuration>
+    </plugin>
 		</plugins>
 	
       <pluginManagement>
