@@ -3,10 +3,10 @@
   <groupId>com.vordel.mime</groupId>
   <artifactId>vordel-mime</artifactId>
   <versioning>
-    <release>7.7.20200930</release>
+    <release>7.7.20230228</release>
     <versions>
-      <version>7.7.20200930</version>
+      <version>7.7.20230228</version>
     </versions>
-    <lastUpdated>20210615171011</lastUpdated>
+    <lastUpdated>20230420073657</lastUpdated>
   </versioning>
 </metadata>

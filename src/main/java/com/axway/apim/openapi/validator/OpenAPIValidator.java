@@ -102,7 +102,9 @@ public class OpenAPIValidator
 			APIManagerSchemaProvider schemaProvider = new APIManagerSchemaProvider(apiManagerUrl, username, password);
 			schemaProvider.setUseOriginalAPISpec(useOriginalAPISpec);
 			String apiSpecification = schemaProvider.getSchema(apiId);
-			this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(apiSpecification).build();
+			/*** debug seb */
+			Utils.traceMessage("Api specification debug seb: "+apiSpecification, TraceLevel.INFO);
+			this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(apiSpecification).withResolveCombinators(true).build();
 		} catch (ApiLoadException e) {
 			Utils.traceMessage("The obtained API-Specification is not compatible with the OpenAPI validator.", e, TraceLevel.ERROR);
 		} catch (Exception e) {
