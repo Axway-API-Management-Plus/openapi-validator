@@ -36,6 +36,8 @@ copyDeps() {
 
 
 copyDeps "${gatewayInstallationFolder}/system/lib/plugins/vordel-mime-7.7.0*.jar" com.vordel.mime vordel-mime ${gatewayVersion}
-#copyDeps "${gatewayInstallationFolder}/system/lib/plugins/apigw-common-7.7.0*.jar" com.axway.apigw apigw-common ${gatewayVersion}
-copyDeps "${gatewayInstallationFolder}/system/lib/pluings/vordel-common-7.7.0*.jar" com.vordel.common vordel-common ${gatewayVersion}
+copyDeps "${gatewayInstallationFolder}/system/lib/plugins/apigw-common-2.4.0.jar" com.axway.apigw apigw-common 2.3.0
+#copyDeps "${gatewayInstallationFolder}/system/lib/pluings/vordel-common-7.7.0*.jar" com.vordel.common vordel-common ${gatewayVersion}
 copyDeps "${gatewayInstallationFolder}/system/lib/plugins/vordel-trace-7.7.0*.jar" com.vordel.trace vordel-trace ${gatewayVersion}
+copyDeps "${gatewayInstallationFolder}/system/lib/vordel-api-model-7.7.0*.jar" com.vordel vordel-api-model ${gatewayVersion}
+copyDeps "${gatewayInstallationFolder}/system/lib/vordel-core-runtime-7.7.0*.jar" com.vordel vordel-core-runtime ${gatewayVersion}
