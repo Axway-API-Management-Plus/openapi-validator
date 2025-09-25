@@ -1,198 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <groupId>com.github.axway-api-management-plus.openapi-validator</groupId>
-   <artifactId>openapi-validator</artifactId>
-   <version>1.6.6-SNAPSHOT</version>
-   <name>openapi-validator</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github.axway-api-management-plus.openapi-validator</groupId>
+    <artifactId>openapi-validator</artifactId>
+    <version>1.7.0-SNAPSHOT</version>
+    <name>openapi-validator</name>
 
-   <url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
-   
-	<licenses>
-		<license>
-			<name>The Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
+    <url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
 
-	<developers>
-		<developer>
-			<name>Chris Wiechmann</name>
-			<email>cwiechmann@axway.com</email>
-			<organization>Axway</organization>
-			<organizationUrl>http://www.axway.com</organizationUrl>
-		</developer>
-	</developers>
-	
-	<scm>
-		<connection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</connection>
-		<developerConnection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</developerConnection>
-		<url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
-	  <tag>v1.6.6</tag>
-  </scm>
-   
-   <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <maven.compiler.source>1.8</maven.compiler.source>
-      <maven.compiler.target>1.8</maven.compiler.target>
-      <apigateway.version>7.7.20230228</apigateway.version>
-   </properties>
-   
-   <repositories>
-   		<repository>
-   			<id>local-maven-repo</id>
-   			<url>file:///${project.basedir}/apigateway-dependencies</url>
-   		</repository>
-   </repositories>
-   
-   <dependencies>
-   		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version>
-		</dependency>
-   	  <!-- Any higher version causing the API-Gateway to fail as it conflicts with the delivery Guava-Library used for the Cassandra communication -->
-      <dependency>
-         <groupId>com.atlassian.oai</groupId>
-         <artifactId>swagger-request-validator-core</artifactId>
-         <version>2.39.0</version> 
-      </dependency>
-      <dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-simple</artifactId>
-	<version>1.7.30</version>
-      </dependency>
-      <dependency>
-         <groupId>com.axway.apigw</groupId>
-         <artifactId>apigw-common</artifactId>
-         <version>${apigateway.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>com.vordel.mime</groupId>
-         <artifactId>vordel-mime</artifactId>
-         <version>${apigateway.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>com.vordel.trace</groupId>
-         <artifactId>vordel-trace</artifactId>
-         <version>${apigateway.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>com.vordel</groupId>
-         <artifactId>vordel-core-runtime</artifactId>
-         <version>${apigateway.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>com.vordel</groupId>
-         <artifactId>vordel-api-model</artifactId>
-         <version>${apigateway.version}</version>
-      </dependency>
-      <dependency>
-	<groupId>com.fasterxml.jackson.core</groupId>
-	<artifactId>jackson-core</artifactId>
-	<version>2.13.2</version>
-	<scope>provided</scope>
-      </dependency>
-      <dependency>
-	<groupId>com.fasterxml.jackson.core</groupId>
-	<artifactId>jackson-databind</artifactId>
-	<version>2.13.2.1</version>
-	<scope>provided</scope>
-      </dependency>
-      
-      <dependency>
-		<groupId>org.testng</groupId>
-		<artifactId>testng</artifactId>
-		<version>7.4.0</version>
-		<scope>test</scope>
-      </dependency>
-      <dependency>
-    	<groupId>org.mock-server</groupId>
-    	<artifactId>mockserver-netty</artifactId>
-    	<version>5.11.2</version>
-    	<scope>test</scope>
-      </dependency>
-      <dependency>
-    	<groupId>org.mock-server</groupId>
-    	<artifactId>mockserver-client-java</artifactId>
-    	<version>5.11.2</version>
-    	<scope>test</scope>
-      </dependency>
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-       
-   </dependencies>
-   <build>
-      <plugins>
-	<plugin>
-		<artifactId>maven-assembly-plugin</artifactId>
-		<version>3.3.0</version>
-		<executions>
-			<execution>
-				<id>distribution</id>
-				<phase>package</phase>
-				<goals>
-					<goal>single</goal>
-				</goals>
-				<configuration>
-					<finalName> axway-openapi-validator-${project.version}</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
-					<descriptors>
-						<descriptor>lib/dist-release.xml</descriptor>
-					</descriptors>
-					<attach>false</attach>
-					<appendAssemblyId>false</appendAssemblyId>
-				</configuration>
-			</execution>
-		</executions>
-	</plugin>
-      	<plugin>
-      		<groupId>org.apache.maven.plugins</groupId>
-      		<artifactId>maven-compiler-plugin</artifactId>
-      		<version>3.8.0</version>
-      		<configuration>
-        		<source>1.8</source>
-        		<target>1.8</target>
-      		</configuration>
-    	</plugin>
-      </plugins>
-	
-      <pluginManagement>
-         <plugins>
-            <plugin>
-               <artifactId>maven-clean-plugin</artifactId>
-               <version>3.1.0</version>
-            </plugin>
-            <plugin>
-               <artifactId>maven-compiler-plugin</artifactId>
-               <version>3.8.0</version>
-            </plugin>
-            <plugin>
-               <artifactId>maven-surefire-plugin</artifactId>
-               <version>2.22.1</version>
-            </plugin>
-            <plugin>
-               <artifactId>maven-jar-plugin</artifactId>
-               <version>3.0.2</version>
-            </plugin>
-            <plugin>
-               <artifactId>maven-install-plugin</artifactId>
-               <version>2.5.2</version>
-            </plugin>
-            <plugin>
-               <artifactId>maven-deploy-plugin</artifactId>
-               <version>2.8.2</version>
-            </plugin>
-            <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-            <plugin>
-               <artifactId>maven-site-plugin</artifactId>
-               <version>3.7.1</version>
-            </plugin>
-            <plugin>
-               <artifactId>maven-project-info-reports-plugin</artifactId>
-               <version>3.0.0</version>
-            </plugin>
-         </plugins>
-      </pluginManagement>
-   </build>
+    <developers>
+        <developer>
+            <name>Chris Wiechmann</name>
+            <email>cwiechmann@axway.com</email>
+            <organization>Axway</organization>
+            <organizationUrl>http://www.axway.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git</connection>
+        <developerConnection>scm:git:https://github.com/Axway-API-Management-Plus/openapi-validator.git
+        </developerConnection>
+        <url>https://github.com/Axway-API-Management-Plus/openapi-validator</url>
+        <tag>v1.6.6</tag>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <apigateway.version>7.7.20230228</apigateway.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>local-maven-repo</id>
+            <url>file:///${project.basedir}/apigateway-dependencies</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.13</version>
+        </dependency>
+        <!-- Any higher version causing the API-Gateway to fail as it conflicts with the delivery Guava-Library used for the Cassandra communication -->
+        <dependency>
+            <groupId>com.atlassian.oai</groupId>
+            <artifactId>swagger-request-validator-core</artifactId>
+            <version>2.39.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+        <dependency>
+            <groupId>com.axway.apigw</groupId>
+            <artifactId>apigw-common</artifactId>
+            <version>${apigateway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vordel.mime</groupId>
+            <artifactId>vordel-mime</artifactId>
+            <version>${apigateway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vordel.trace</groupId>
+            <artifactId>vordel-trace</artifactId>
+            <version>${apigateway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vordel</groupId>
+            <artifactId>vordel-core-runtime</artifactId>
+            <version>${apigateway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vordel</groupId>
+            <artifactId>vordel-api-model</artifactId>
+            <version>${apigateway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.13.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-netty</artifactId>
+            <version>5.11.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mock-server</groupId>
+            <artifactId>mockserver-client-java</artifactId>
+            <version>5.11.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>
 

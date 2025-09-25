@@ -23,7 +23,6 @@
 
   <fileSets>
     <fileSet>
-      <outputDirectory></outputDirectory>
       <includes>
         <include>README.md</include>
         <include>LICENSE</include>

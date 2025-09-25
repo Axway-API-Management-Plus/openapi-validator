@@ -27,20 +27,16 @@ import com.vordel.mime.QueryStringHeaderSet;
  * OpenAPIValidator
  *
  */
-public class OpenAPIValidator
-{
-	private static Map<Integer, OpenAPIValidator> instances = new HashMap<Integer, OpenAPIValidator>();
-	
-	private static Map<String, OpenAPIValidator> instances4APIIDs = new HashMap<String, OpenAPIValidator>();
-	
+public class OpenAPIValidator {
+	private static Map<Integer, OpenAPIValidator> instances = new HashMap<>();
+	private static Map<String, OpenAPIValidator> instances4APIIDs = new HashMap<>();
 	private OpenApiInteractionValidator validator;
-	
-	private MaxSizeHashMap<String, Object> exposurePath2SpecifiedPathMap = new MaxSizeHashMap<String, Object>();
-	
-	private int payloadLogMaxLength = 40;
-	
+	private MaxSizeHashMap<String, Object> exposurePath2SpecifiedPathMap = new MaxSizeHashMap<>();
+
+	private final int payloadLogMaxLength = 40;
+
 	private boolean decodeQueryParams = true;
-	
+
 	public static synchronized OpenAPIValidator getInstance(String openAPISpec)  {
 		int hashCode = openAPISpec.hashCode();
 		if(instances.containsKey(hashCode)) {
@@ -53,21 +49,21 @@ public class OpenAPIValidator
 			return validator;
 		}
 	}
-	
+
 	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, boolean useOriginalAPISpec) throws Exception  {
 		String apiManagerURL = "https://localhost:8075";
 		return getInstance(apiId, username, password, apiManagerURL, useOriginalAPISpec);
 	}
-	
+
 	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, String apiManagerUrl) throws Exception  {
 		return getInstance(apiId, username, password, apiManagerUrl, false);
 	}
-	
+
 	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password) throws Exception  {
 		String apiManagerURL = "https://localhost:8075";
 		return getInstance(apiId, username, password, apiManagerURL, false);
 	}
-	
+
 	public static synchronized OpenAPIValidator getInstance(String apiId, String username, String password, String apiManagerUrl, boolean useOriginalAPISpec) throws Exception  {
 		if(instances4APIIDs.containsKey(apiId)) {
 			Utils.traceMessage("Using cached instance of OpenAPI validator for API-ID: " + apiId, TraceLevel.DEBUG);
@@ -79,7 +75,7 @@ public class OpenAPIValidator
 			return validator;
 		}
 	}
-    
+
     private OpenAPIValidator(String openAPISpec) {
 		super();
 		try {
@@ -94,7 +90,7 @@ public class OpenAPIValidator
 			this.validator = OpenApiInteractionValidator.createForInlineApiSpecification(openAPISpec).build();
 		}
 	}
-    
+
     private OpenAPIValidator(String apiId, String username, String password, String apiManagerUrl, boolean useOriginalAPISpec) throws Exception {
 		super();
 		try {
@@ -112,7 +108,7 @@ public class OpenAPIValidator
 			throw e;
 		}
 	}
-    
+
     public boolean isValidRequest(String payload, String verb, String path, QueryStringHeaderSet queryParams, HeaderSet headers) {
     	ValidationReport validationReport = validateRequest(payload, verb, path, queryParams, headers);
     	if (validationReport.hasErrors()) {
@@ -121,19 +117,19 @@ public class OpenAPIValidator
     		return true;
     	}
     }
-    
+
     public ValidationReport validateRequest(String payload, String verb, String path, QueryStringHeaderSet queryParams, HeaderSet headers) {
     	Utils.traceMessage("Validate request: [verb: "+verb+", path: '"+path+"', payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
     	ValidationReport validationReport = null;
     	String originalPath = path;
     	// The given path might be the FE-API exposure path which is not guaranteed to be part of the API-Specification.
-    	// If for example the Petstore is exposed with /petstore/v3 the path we get might be /petstore/v3/store/order/78787 
+    	// If for example the Petstore is exposed with /petstore/v3 the path we get might be /petstore/v3/store/order/78787
     	// and with that, the validation fails, as the specification doesn't contain this path.
-    	// The following code nevertheless tries to find the matching API path by removing the first part of the path and 
-    	// repeating the process max. 5 times. 
-    	
+    	// The following code nevertheless tries to find the matching API path by removing the first part of the path and
+    	// repeating the process max. 5 times.
+
     	boolean cachePath = false;
-    	// Perhaps the path has already looked up and matched to the specified path (e.g. /petstore/v3/store/order/78787 --> /store/order/{orderId} 
+    	// Perhaps the path has already looked up and matched to the specified path (e.g. /petstore/v3/store/order/78787 --> /store/order/{orderId}
     	if(exposurePath2SpecifiedPathMap.containsKey(path)) {
     		if(exposurePath2SpecifiedPathMap.get(path) instanceof ValidationReport) {
     			// Previously with the given we got a validation error, just return the same again
@@ -151,12 +147,12 @@ public class OpenAPIValidator
 	    		validationReport = _validateRequest(payload, verb, path, queryParams, headers);
 	    		if(validationReport.hasErrors()) {
 	    			if(validationReport.getMessages().toString().contains("No API path found that matches request")) {
-	    				// Only cache the path, if a direct hit fails 
+	    				// Only cache the path, if a direct hit fails
 	    				cachePath = true;
 	    				/*
-	    				 * If no match was found in the API-Spec for the given path, then we remove the first part of the 
+	    				 * If no match was found in the API-Spec for the given path, then we remove the first part of the
 	    				 * path because the API might be exposed with a different path by the API-Manager than defined in the spec.
-	    				 * For example: /great-petstore/pet/31233 will not find anything in the first attempt, because the 
+	    				 * For example: /great-petstore/pet/31233 will not find anything in the first attempt, because the
 	    				 * API does not exist with /great-petstore in the API-Spec. This process is repeated at most 5 times.
 	    				 */
 	    				if(path.indexOf("/", 1)==-1) {
@@ -182,7 +178,7 @@ public class OpenAPIValidator
     	}
     	return validationReport;
     }
-    
+
     public boolean isValidResponse(String payload, String verb, String path, int status, HeaderSet headers) {
     	Utils.traceMessage("Validate response: [verb: "+verb+", path: '"+path+"', status: "+status+", payload: '"+Utils.getContentStart(payload, payloadLogMaxLength, true)+"']", TraceLevel.INFO);
     	ValidationReport validationReport = validateResponse(payload, verb, path, status, headers);
@@ -192,7 +188,7 @@ public class OpenAPIValidator
     		return true;
     	}
     }
-    
+
     public ValidationReport validateResponse(final String payload, String verb, String path, final int status, final HeaderSet headers) {
     	return _validateResponse(payload, verb, path, status, headers);
     }
@@ -203,24 +199,24 @@ public class OpenAPIValidator
 			public String getPath() {
 				return path;
 			}
-			
+
 			@Override
 			public Method getMethod() {
 				return Request.Method.valueOf(verb);
 			}
-			
+
 			@Override
 			public Optional<String> getBody() {
 				return Optional.ofNullable(payload);
 			}
-			
+
 			@SuppressWarnings("unchecked")
 			@Override
 			public Collection<String> getQueryParameters() {
 				if(queryParams==null) return Collections.emptyList();
 				return (Collection<String>) ((queryParams.size() == 0) ? Collections.emptyList() : queryParams.getHeaderSet());
 			}
-			
+
 			@SuppressWarnings("unchecked")
 			@Override
 			public Collection<String> getQueryParameterValues(String name) {
@@ -239,13 +235,13 @@ public class OpenAPIValidator
 				}
 				return (Collection<String>) ((values == null) ? Collections.emptyList() : values);
 			}
-			
+
 			@Override
 			public Map<String, Collection<String>> getHeaders() {
 				// Not used for the validation
 				return null;
 			}
-			
+
 			@Override
 			public Collection<String> getHeaderValues(String name) {
 				return Utils.getHeaderValues(headers, name);
@@ -262,7 +258,7 @@ public class OpenAPIValidator
     	Utils.removeContentTypeHeader(headers);
     	return validationReport;
     }
-	
+
 	private ValidationReport _validateResponse(final String payload, String verb, String path, final int status, final HeaderSet headers) {
 		Response response = new Response() {
 			@Override
@@ -278,7 +274,7 @@ public class OpenAPIValidator
 				return Optional.ofNullable(payload);
 			}
 		};
-    	
+
     	ValidationReport validationReport = validator.validateResponse(path, Request.Method.valueOf(verb), response);
     	if(validationReport.hasErrors()) {
     		for(Message message : validationReport.getMessages()) {
@@ -288,19 +284,12 @@ public class OpenAPIValidator
     	return validationReport;
     }
 
-	public int getPayloadLogMaxLength() {
-		return payloadLogMaxLength;
-	}
-
-	public void setPayloadLogMaxLength(int payloadLogMaxLength) {
-		this.payloadLogMaxLength = payloadLogMaxLength;
-	}
 
 	static class MaxSizeHashMap<K, V> extends LinkedHashMap<K, V> {
 
 		private static final long serialVersionUID = 1L;
 
-		private int maxSize; 
+		private int maxSize;
 
 		@Override
 		protected boolean removeEldestEntry(Entry<K, V> eldest) {
