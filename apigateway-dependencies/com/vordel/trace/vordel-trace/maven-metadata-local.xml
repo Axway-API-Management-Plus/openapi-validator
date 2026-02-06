@@ -3,12 +3,13 @@
   <groupId>com.vordel.trace</groupId>
   <artifactId>vordel-trace</artifactId>
   <versioning>
-    <release>20230228</release>
+    <release>7.7.20250830</release>
     <versions>
       <version>7.7.20230228</version>
       <version>7.7.20230830</version>
       <version>20230228</version>
+      <version>7.7.20250830</version>
     </versions>
-    <lastUpdated>20231129165546</lastUpdated>
+    <lastUpdated>20260206205341</lastUpdated>
   </versioning>
 </metadata>

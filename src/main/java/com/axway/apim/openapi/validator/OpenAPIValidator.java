@@ -214,7 +214,7 @@ public class OpenAPIValidator {
 			@Override
 			public Collection<String> getQueryParameters() {
 				if(queryParams==null) return Collections.emptyList();
-				return (Collection<String>) ((queryParams.size() == 0) ? Collections.emptyList() : queryParams.getHeaderSet());
+				return ((queryParams.size() == 0) ? Collections.emptyList() : queryParams.getHeaderSet());
 			}
 
 			@SuppressWarnings("unchecked")
@@ -233,7 +233,7 @@ public class OpenAPIValidator {
 						}
 					});
 				}
-				return (Collection<String>) ((values == null) ? Collections.emptyList() : values);
+				return (values == null) ? Collections.emptyList() : values;
 			}
 
 			@Override

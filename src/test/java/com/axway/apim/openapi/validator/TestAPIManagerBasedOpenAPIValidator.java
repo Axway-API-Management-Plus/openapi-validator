@@ -17,15 +17,15 @@ import org.testng.reporters.Files;
 import com.vordel.mime.HeaderSet;
 
 public class TestAPIManagerBasedOpenAPIValidator {
-	
+
 	private ClientAndServer mockServer;
-	
+
 	private static final String TEST_PACKAGE = "com/axway/apim/openapi/validator/";
-	
+
 	@SuppressWarnings("resource")
 	@Test
 	public void getAPISpecForValidApiId() throws Exception {
-		MockServerClient mock = new MockServerClient("127.0.01", 1080);
+		MockServerClient mock = new MockServerClient("127.0.0.1", 1080);
 		mock.when(request()
 				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
 				.withQueryStringParameter("swaggerVersion", "2.0")
@@ -36,7 +36,7 @@ public class TestAPIManagerBasedOpenAPIValidator {
 		String apiSpec = provider.getSchema("d45571e4-ec7d-444c-af09-11265d75c446");
 		Assert.assertEquals(apiSpec, "{ This is supposed to be a swagger-file }");
 	}
-	
+
 	@SuppressWarnings("resource")
 	@Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error getting API-Specification from API-Manager.")
 	public void getAPISpecForInvalidApiId() throws Exception {
@@ -52,7 +52,7 @@ public class TestAPIManagerBasedOpenAPIValidator {
 		APIManagerSchemaProvider provider = new APIManagerSchemaProvider("https://localhost:1080", "user", "password");
 		provider.getSchema("d45571e4-ec7d-444c-af09-99999999999");
 	}
-	
+
 	@SuppressWarnings("resource")
 	@Test
 	public void getAPISpecForValidOAS30ApiId() throws Exception {
@@ -75,7 +75,7 @@ public class TestAPIManagerBasedOpenAPIValidator {
 		String apiSpec = provider.getSchema("d45571e4-ec7d-444c-af09-11265d75c446");
 		Assert.assertEquals(apiSpec, "{ This is supposed to be a swagger-file }");
 	}
-	
+
 	@SuppressWarnings("resource")
 	@Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Error loading Backend-API-ID from API Manager for API: INVALID-API-ID")
 	public void getBackendAPISpecForInvalidApiId() throws Exception {
@@ -90,12 +90,12 @@ public class TestAPIManagerBasedOpenAPIValidator {
 		String apiSpec = provider.getSchema("INVALID-API-ID");
 		Assert.assertEquals(apiSpec, "{ This is supposed to be a swagger-file }");
 	}
-	
+
 	@SuppressWarnings("resource")
 	@Test
 	public void testOpenAPISpecification() throws Exception {
 		String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "PetstoreSwagger2.0.json"));
-		
+
 		MockServerClient mock = new MockServerClient("127.0.01", 1080);
 		mock.when(request()
 				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c888")
@@ -103,24 +103,24 @@ public class TestAPIManagerBasedOpenAPIValidator {
 			.respond(response().withStatusCode(200).withBody(new JsonBody(swagger))
 		);
 		OpenAPIValidator validator = OpenAPIValidator.getInstance("d45571e4-ec7d-444c-af09-11265d75c888", "user", "password", "https://localhost:1080");
-		
+
     	String payload = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "ValidPostPetPayload.json"));
     	String path = "/pet";
     	String verb = "POST";
     	HeaderSet headers = new HeaderSet();
     	headers.addHeader("Content-Type", "application/json");
-		
+
 		boolean isValid = validator.isValidRequest(payload, verb, path, null, headers);
-		
+
 		Assert.assertTrue(isValid, "Request is supposed to be valid");
 	}
-	
+
 	@SuppressWarnings("resource")
 	@Test
 	public void testOriginalAPISpecification() throws Exception {
 		String apiProxy = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "FrontAPIProxyResponse.json"));
 		String swagger = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "OriginallyImportedAPISpecification.json"));
-		
+
 		MockServerClient mock = new MockServerClient("127.0.01", 1080);
 		mock.when(request()
 				.withPath("/api/portal/v1.3/proxies/d45571e4-ec7d-444c-af09-11265d75c888") )
@@ -135,15 +135,15 @@ public class TestAPIManagerBasedOpenAPIValidator {
 				.withBody(new JsonBody(swagger))
 			);
 		OpenAPIValidator validator = OpenAPIValidator.getInstance("d45571e4-ec7d-444c-af09-11265d75c888", "user", "password", "https://localhost:1080", true);
-		
+
     	String payload = Files.readFile(this.getClass().getClassLoader().getResourceAsStream(TEST_PACKAGE + "ValidPostPetPayload.json"));
     	String path = "/pet";
     	String verb = "POST";
     	HeaderSet headers = new HeaderSet();
     	headers.addHeader("Content-Type", "application/json");
-		
+
 		boolean isValid = validator.isValidRequest(payload, verb, path, null, headers);
-		
+
 		Assert.assertTrue(isValid, "Request is supposed to be valid");
 	}
 

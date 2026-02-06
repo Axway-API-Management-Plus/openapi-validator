@@ -1,23 +1,20 @@
 package com.axway.apim.openapi.validator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.vordel.mime.HeaderSet;
 import com.vordel.mime.HeaderSet.Header;
 import com.vordel.mime.HeaderSet.HeaderEntry;
 import com.vordel.trace.Trace;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class Utils {
 
-	private static Logger LOG = LoggerFactory.getLogger("OpenAPIValidator");
-	private static String LOG_PREFIX = "OpenAPIValidator: ";
+	private static final Logger LOG = LoggerFactory.getLogger("OpenAPIValidator");
+	private static final String LOG_PREFIX = "OpenAPIValidator: ";
 
 	enum TraceLevel {
 		FATAL, ALWAYS, ERROR, INFO, MIN, DEBUG, DATA ;
