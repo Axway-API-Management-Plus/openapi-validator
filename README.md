@@ -6,12 +6,6 @@ The following illustrates how it works and behaves in the API-Gateway at runtime
 
 ![OpenAPI Validation](images/openapi-validation-overview.png)
 
-
-mvn install:install-file -Dfile=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies/com/axway/apigw/apigw-common/temp/apigw-common-7.7.20250830.jar -DgroupId=com.axway.apigw -DartifactId=apigw-common -Dversion=7.7.20250830 -Dpackaging=jar -DlocalRepositoryPath=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies
-mvn install:install-file -Dfile=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies/com/vordel/mime/vordel-mime/temp/vordel-mime-7.7.0.20250830.jar -DgroupId=com.vordel.mime -DartifactId=vordel-mime -Dversion=7.7.20250830 -Dpackaging=jar -DlocalRepositoryPath=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies
-mvn install:install-file -Dfile=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies/com/vordel/trace/vordel-trace/temp/vordel-trace-7.7.20250830.jar -DgroupId=com.vordel.trace -DartifactId=vordel-trace -Dversion=7.7.20250830 -Dpackaging=jar -DlocalRepositoryPath=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies
-mvn install:install-file -Dfile=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies/com/vordel/core/vordel-core-runtime/temp/vordel-core-runtime-7.7.0.20250830.jar -DgroupId=com.vordel -DartifactId=vordel-core-runtime -Dversion=7.7.20250830 -Dpackaging=jar -DlocalRepositoryPath=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies
-mvn install:install-file -Dfile=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies/com/vordel/vordel-api-model/temp/vordel-api-model-7.7.20250830.jar -DgroupId=com.vordel -DartifactId=vordel-api-model -Dversion=7.7.20250830 -Dpackaging=jar -DlocalRepositoryPath=/Users/rnatarajan/IdeaProjects/openapi-validator/apigateway-dependencies
 ## Installation
 
 To install, download the [release package](https://github.com/Axway-API-Management-Plus/openapi-validator/releases) and install it under `ext/lib`. After that, restart the API Gateway. It is recommended to make the jars files known in the Policy Studio as well as it is describe here: https://docs.axway.com/bundle/axway-open-docs/page/docs/apim_policydev/apigw_poldev/general_ps_settings/index.html#runtime-dependencies
