@@ -73,6 +73,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.vordel.common</groupId>
+            <artifactId>vordel-common</artifactId>
+            <version>${apigateway.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.vordel.mime</groupId>
             <artifactId>vordel-mime</artifactId>
             <version>${apigateway.version}</version>
