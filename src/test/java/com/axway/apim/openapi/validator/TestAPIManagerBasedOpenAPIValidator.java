@@ -25,9 +25,9 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	@SuppressWarnings("resource")
 	@Test
 	public void getAPISpecForValidApiId() throws Exception {
-		MockServerClient mock = new MockServerClient("127.0.0.1", 1080);
+		MockServerClient mock = new MockServerClient("localhost", 1080);
 		mock.when(request()
-				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
+				.withPath("/api/portal/v1.4/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
 				.withQueryStringParameter("swaggerVersion", "2.0")
 				)
 		.respond(response().withBody("{ This is supposed to be a swagger-file }")
@@ -42,7 +42,7 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	public void getAPISpecForInvalidApiId() throws Exception {
 		MockServerClient mock = new MockServerClient("127.0.01", 1080);
 		mock.when(request()
-				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-99999999999")
+				.withPath("/api/portal/v1.4/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-99999999999")
 				.withQueryStringParameter("swaggerVersion", "2.0")
 				)
 		.respond(response()
@@ -60,12 +60,12 @@ public class TestAPIManagerBasedOpenAPIValidator {
 		// Initially trying to download Swagger 2.0
 		MockServerClient mock = new MockServerClient("127.0.01", 1080);
 		mock.when(request()
-				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
+				.withPath("/api/portal/v1.4/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
 				.withQueryStringParameter("swaggerVersion", "2.0"))
 			.respond(response().withStatusCode(500).withBody(new JsonBody(failedToDownloadAPI))
 				);
 		mock.when(request()
-				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
+				.withPath("/api/portal/v1.4/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c446")
 				.withQueryStringParameter("swaggerVersion", "3.0")
 				)
 		.respond(response().withStatusCode(200).withBody("{ This is supposed to be a swagger-file }")
@@ -81,7 +81,7 @@ public class TestAPIManagerBasedOpenAPIValidator {
 	public void getBackendAPISpecForInvalidApiId() throws Exception {
 		MockServerClient mock = new MockServerClient("127.0.01", 1080);
 		mock.when(request()
-				.withPath("/api/portal/v1.3/proxies/INVALID-API-ID"))
+				.withPath("/api/portal/v1.4/proxies/INVALID-API-ID"))
 			.respond(response().withStatusCode(403).withBody(new JsonBody("{\"errors\":[{\"code\":403,\"message\":\"Forbidden\"}]}"))
 		);
 
@@ -98,7 +98,7 @@ public class TestAPIManagerBasedOpenAPIValidator {
 
 		MockServerClient mock = new MockServerClient("127.0.01", 1080);
 		mock.when(request()
-				.withPath("/api/portal/v1.3/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c888")
+				.withPath("/api/portal/v1.4/discovery/swagger/api/id/d45571e4-ec7d-444c-af09-11265d75c888")
 				.withQueryStringParameter("swaggerVersion", "2.0"))
 			.respond(response().withStatusCode(200).withBody(new JsonBody(swagger))
 		);
@@ -123,12 +123,12 @@ public class TestAPIManagerBasedOpenAPIValidator {
 
 		MockServerClient mock = new MockServerClient("127.0.01", 1080);
 		mock.when(request()
-				.withPath("/api/portal/v1.3/proxies/d45571e4-ec7d-444c-af09-11265d75c888") )
+				.withPath("/api/portal/v1.4/proxies/d45571e4-ec7d-444c-af09-11265d75c888") )
 		.respond(response()
 				.withStatusCode(200)
 				.withBody(new JsonBody(apiProxy)));
 		mock.when(request()
-				.withPath("/api/portal/v1.3/apirepo/ab9e6a41-cb93-4a9b-9faf-74a901f14922/download")
+				.withPath("/api/portal/v1.4/apirepo/ab9e6a41-cb93-4a9b-9faf-74a901f14922/download")
 				.withQueryStringParameter("original", "true"))
 		.respond(response()
 				.withStatusCode(200)
