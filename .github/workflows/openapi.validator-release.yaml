@@ -1,4 +1,4 @@
-name: OpenAPI-Validator
+name: Release
 on:
   workflow_dispatch:
     inputs:
