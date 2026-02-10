@@ -1,0 +1,50 @@
+name: OpenAPI-Validator
+on:
+  workflow_dispatch:
+    inputs:
+        releaseVersion:
+          description: "Default version to use when preparing a release."
+          required: true
+          default: "1.7.0"
+        developmentVersion:
+          description: "Default version to use for new local working copy."
+          required: true
+          default: "1.7.1-SNAPSHOT"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Set up JDK 11
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: 11
+      - name: Configure Git user
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+      - name: Release prepare
+        run: |
+          git status
+          mvn -B release:prepare
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: List current directory
+        run: |
+          ls -la
+      - name: Release perform
+        run: |
+          mvn -B release:perform -Darguments="-Dmaven.deploy.skip=true"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Github Release
+        uses: ncipollo/release-action@v1
+        with:
+            name: APIM-CLI ${{ github.event.inputs.releaseVersion }}
+            tag: ${{ github.event.inputs.releaseVersion }}
+            artifacts: "target/*.tar.gz,target/*.zip"
+            draft: true
