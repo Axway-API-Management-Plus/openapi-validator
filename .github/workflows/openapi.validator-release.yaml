@@ -44,7 +44,7 @@ jobs:
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-            name: APIM-CLI ${{ github.event.inputs.releaseVersion }}
+            name: openapi-validator ${{ github.event.inputs.releaseVersion }}
             tag: ${{ github.event.inputs.releaseVersion }}
             artifacts: "target/*.tar.gz,target/*.zip"
             draft: true
