@@ -189,6 +189,7 @@ This artefact has been tested with API-Management Versions
 
 | Version            | Comment         |
 | :---               | :---            |
+| 7.7-20250830       |                 |
 | 7.7-20210830       |                 |
 | 7.7-20210530       |                 |
 | 7.7-20210330       |                 |
