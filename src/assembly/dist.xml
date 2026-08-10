@@ -8,20 +8,14 @@
     <includeBaseDirectory>true</includeBaseDirectory>
     <includeSiteDirectory>false</includeSiteDirectory>
     <baseDirectory>openapi-validator-${pom.version}</baseDirectory>
-    <dependencySets>
-        <dependencySet>
-            <outputDirectory>ext/lib</outputDirectory>
-            <unpack>false</unpack>
-            <includes>
-                <include>io.swagger.parser.v3:swagger-parser-v2-converter</include>
-                <include>io.swagger.parser.v3:swagger-parser</include>
-                <include>com.atlassian.oai:swagger-request-validator-core</include>
-                <include>com.github.axway-api-management-plus.openapi-validator:*</include>
-            </includes>
-        </dependencySet>
-    </dependencySets>
-
     <fileSets>
+        <fileSet>
+            <directory>target</directory>
+            <outputDirectory>ext/lib</outputDirectory>
+            <includes>
+                <include>openapi-validator-${pom.version}-relocated.jar</include>
+            </includes>
+        </fileSet>
         <fileSet>
             <outputDirectory></outputDirectory>
             <includes>
